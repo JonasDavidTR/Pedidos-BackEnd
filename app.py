@@ -22,7 +22,7 @@ else:
 
 # Conecta à planilha
 client = gspread.authorize(creds)
-sheet = client.open("NOME_DA_SUA_PLANILHA").sheet1  # <- troque pelo nome real da sua planilha
+sheet = client.open("Pedidos_DegustLanches").sheet1  # <- troque pelo nome real da sua planilha
 
 @app.route("/", methods=["GET"])
 def home():
