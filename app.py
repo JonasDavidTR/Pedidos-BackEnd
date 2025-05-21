@@ -6,11 +6,13 @@ from google.oauth2.service_account import Credentials
 
 app = Flask(__name__)
 
+
 # Configuração do escopo da API
 scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 
 
 cred_json = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
+
 
 if cred_json:
     # Ambiente de produção
@@ -18,9 +20,11 @@ if cred_json:
     cred_file = StringIO(cred_json)
     import json
     creds = Credentials.from_service_account_info(json.loads(cred_json), scopes=scope)
+
 else:
     # Ambiente local (arquivo físico)
     creds = Credentials.from_service_account_file("credenciais.json", scopes=scope)
+    raise Exception("Credenciais não encontradas")
 
 # Conecta à planilha
 client = gspread.authorize(creds)
