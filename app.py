@@ -47,3 +47,8 @@ def enviar_pedido():
         return jsonify({"status": "sucesso"}), 200
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 500
+
+if __name__ == '__main__':
+    from os import environ
+    port = int(environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
