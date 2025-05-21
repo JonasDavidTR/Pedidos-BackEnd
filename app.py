@@ -1,8 +1,7 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import gspread
 import os
 from google.oauth2.service_account import Credentials
-
 
 app = Flask(__name__)
 
@@ -32,7 +31,7 @@ sheet = client.open("Pedidos_DegustLanches").sheet1
 
 @app.route("/", methods=["GET"])
 def home():
-    return "Servidor online!"
+    return render_template("index.html")
 
 @app.route("/enviar-pedido", methods=["POST"])
 def enviar_pedido():
