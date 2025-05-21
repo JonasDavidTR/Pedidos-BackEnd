@@ -150,7 +150,7 @@
     button.textContent = "Enviando pedido... Aguarde";
 
     const formData = new FormData(form);
-    fetch("https://pedidos-backend-0ggt.onrender.com/", {
+    fetch("https://pedidos-backend-0ggt.onrender.com/enviar-pedido", {
       method: "POST",
       body: formData
     })

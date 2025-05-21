@@ -36,7 +36,6 @@ def home():
 @app.route("/enviar-pedido", methods=["POST"])
 def enviar_pedido():
     try:
-        print("==========================================")
         whatsapp = request.form["whatsapp"]
         pedido = request.form["pedido"]
         endereco = request.form["endereco"]
