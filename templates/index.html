@@ -109,7 +109,7 @@
       <img src="static/images/refri.jpg" alt="Cardápio 2" onclick="abrirLightbox(this.src)">
     </div>
 
-    <form id="pedido-form">
+    <form id="pedido-form" action="/enviar-pedido" method="POST">
       <label for="whatsapp">Número do WhatsApp:</label>
       <input type="tel" id="whatsapp" name="whatsapp" required>
 
