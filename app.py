@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, render_template
 import gspread
 import os
 from google.oauth2.service_account import Credentials
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -40,8 +41,10 @@ def enviar_pedido():
         pedido = request.form["pedido"]
         endereco = request.form["endereco"]
         pagamento = request.form["pagamento"]
+
+        timestamp = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         
-        sheet.append_row([whatsapp, pedido, endereco, pagamento])
+        sheet.append_row([timestamp, whatsapp, pedido, endereco, pagamento])
         return jsonify({"status": "sucesso"}), 200
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 500
