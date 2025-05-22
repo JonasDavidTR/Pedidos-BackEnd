@@ -1,106 +1,12 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/templates/css/style.css">
   <title>Pedidos Online</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #fff8dc;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    h1 {
-      text-align: center;
-      color: #d4a017;
-    }
-
-    .cardapio {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-
-    .cardapio img {
-      width: 45%;
-      cursor: pointer;
-      border-radius: 8px;
-      transition: transform 0.2s;
-    }
-
-    .cardapio img:hover {
-      transform: scale(1.05);
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    label {
-      font-weight: bold;
-    }
-
-    input, textarea, select, button {
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
-    button {
-      background-color: #d4a017;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    button:hover {
-      background-color: #b98b14;
-    }
-
-    @media (max-width: 600px) {
-      .cardapio img {
-        width: 100%;
-      }
-    }
-
-    /* Lightbox */
-    .lightbox {
-      display: none;
-      position: fixed;
-      z-index: 10;
-      left: 0;
-      top: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.8);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .lightbox img {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 10px;
-    }
-  </style>
 </head>
 <body>
-
   <div class="container">
     <h1>Faça seu Pedido</h1>
 
@@ -113,7 +19,8 @@
       <label for="whatsapp">Número do WhatsApp:</label>
       <input type="tel" id="whatsapp" name="whatsapp" required>
 
-      <label for="pedido">Pedido Completo: (Para Pastel e Cachorro quente, por favor informar se deseja verdura em ambos)</label>
+      <label for="pedido">Pedido Completo: (Para Pastel e Cachorro quente, por favor informar se deseja verdura em
+        ambos)</label>
       <textarea id="pedido" name="pedido" rows="4" required></textarea>
 
       <label for="Endereço">Endereço com ponto de referência: </label>
@@ -136,50 +43,46 @@
     <img id="lightbox-img" src="" alt="Imagem Ampliada">
   </div>
 
+  <script>
+    document.getElementById("pedido-form").addEventListener("submit", function (event) {
+      event.preventDefault();
 
-  
-<script>
-  document.getElementById("pedido-form").addEventListener("submit", function(event) {
-    event.preventDefault();
+      const form = event.target;
+      const button = form.querySelector("button");
 
-    const form = event.target;
-    const button = form.querySelector("button");
-    
-    // Desativa o botão e muda o texto
-    button.disabled = true;
-    button.textContent = "Enviando pedido... Aguarde";
+      // Desativa o botão e muda o texto
+      button.disabled = true;
+      button.textContent = "Enviando pedido... Aguarde";
 
-    const formData = new FormData(form);
-    fetch("https://pedidos-backend-0ggt.onrender.com/enviar-pedido", {
-      method: "POST",
-      body: formData
-    })
-    .then(() => {
-      alert("Pedido enviado com sucesso!");
-      form.reset();
-    })
-    .catch(() => {
-      alert("Erro ao enviar pedido. Tente novamente.");
-    })
-    .finally(() => {
-      // Reativa o botão e volta o texto ao normal
-      button.disabled = false;
-      button.textContent = "Enviar Pedido";
+      const formData = new FormData(form);
+      fetch("https://pedidos-backend-0ggt.onrender.com/enviar-pedido", {
+          method: "POST",
+          body: formData
+        })
+        .then(() => {
+          alert("Pedido enviado com sucesso!");
+          form.reset();
+        })
+        .catch(() => {
+          alert("Erro ao enviar pedido. Tente novamente.");
+        })
+        .finally(() => {
+          // Reativa o botão e volta o texto ao normal
+          button.disabled = false;
+          button.textContent = "Enviar Pedido";
+        });
     });
-  });
 
-  function abrirLightbox(src) {
-    const lightbox = document.getElementById("lightbox");
-    const lightboxImg = document.getElementById("lightbox-img");
-    lightboxImg.src = src;
-    lightbox.style.display = "flex";
-  }
+    function abrirLightbox(src) {
+      const lightbox = document.getElementById("lightbox");
+      const lightboxImg = document.getElementById("lightbox-img");
+      lightboxImg.src = src;
+      lightbox.style.display = "flex";
+    }
 
-  function fecharLightbox() {
-    document.getElementById("lightbox").style.display = "none";
-  }
-</script>
-
-
+    function fecharLightbox() {
+      document.getElementById("lightbox").style.display = "none";
+    }
+  </script>
 </body>
 </html>
