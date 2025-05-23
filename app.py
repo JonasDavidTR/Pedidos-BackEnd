@@ -13,18 +13,20 @@ scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis
 
 cred_json = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
 
+try:
+        
+    if cred_json:
+        # Ambiente de produção
+        from io import StringIO
+        cred_file = StringIO(cred_json)
+        import json
+        creds = Credentials.from_service_account_info(json.loads(cred_json), scopes=scope)
 
-if cred_json:
-    # Ambiente de produção
-    from io import StringIO
-    cred_file = StringIO(cred_json)
-    import json
-    creds = Credentials.from_service_account_info(json.loads(cred_json), scopes=scope)
-
-else:
-    # Ambiente local (arquivo físico)
-    creds = Credentials.from_service_account_file("credenciais.json", scopes=scope)
-    raise Exception("Credenciais não encontradas")
+    else:
+        # Ambiente local (arquivo físico)
+        creds = Credentials.from_service_account_file("credenciais.json", scopes=scope)
+except Exception as e:
+    raise Exception("Credenciais não encontradas ou inválidas. Detalhes: " + str(e))
 
 # Conecta à planilha
 client = gspread.authorize(creds)
