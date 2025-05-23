@@ -40,7 +40,7 @@ def home():
 def enviar_pedido():
 
     referer = request.headers.get("Referer", "")
-    if not referer.startswith("https://degustlanches.onrender.com"):
+    if not referer.startswith("https://pedidos-backend-0ggt.onrender.com/"):
         return jsonify({"status": "erro", "mensagem": "Origem não autorizada"}), 403
 
     try:
