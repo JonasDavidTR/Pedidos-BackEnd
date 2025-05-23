@@ -38,6 +38,11 @@ def home():
 
 @app.route("/enviar-pedido", methods=["POST"])
 def enviar_pedido():
+
+    referer = request.headers.get("Referer", "")
+    if not referer.startswith("https://degustlanches.onrender.com"):
+        return jsonify({"status": "erro", "mensagem": "Origem não autorizada"}), 403
+
     try:
         whatsapp = request.form["whatsapp"]
         pedido = request.form["pedido"]
