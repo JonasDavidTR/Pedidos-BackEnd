@@ -1,125 +1,49 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pedidos Online</title>
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #fff8dc;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-        max-width: 600px;
-        margin: auto;
-        padding: 20px;
-    }
-
-    h1 {
-        text-align: center;
-        color: #d4a017;
-    }
-
-    .cardapio {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-bottom: 20px;
-    }
-
-    .cardapio img {
-        width: 45%;
-        cursor: pointer;
-        border-radius: 8px;
-        transition: transform 0.2s;
-    }
-
-    .cardapio img:hover {
-        transform: scale(1.05);
-    }
-
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    label {
-        font-weight: bold;
-    }
-
-    input,
-    textarea,
-    select,
-    button {
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        font-size: 16px;
-    }
-
-    button {
-        background-color: #d4a017;
-        color: white;
-        border: none;
-        cursor: pointer;
-        transition: background 0.3s;
-    }
-
-    button:hover {
-        background-color: #b98b14;
-    }
-
-    @media (max-width: 600px) {
-        .cardapio img {
-            width: 100%;
-        }
-    }
-
-    /* Lightbox */
-    .lightbox {
-        display: none;
-        position: fixed;
-        z-index: 10;
-        left: 0;
-        top: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.8);
-        justify-content: center;
-        align-items: center;
-    }
-
-    .lightbox img {
-        max-width: 90%;
-        max-height: 90%;
-        border-radius: 10px;
-    }
-  </style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pedido Online - Lanchonete</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  
 </head>
 <body>
-  <div class="container">
-    <h1>Faça seu Pedido</h1>
-
-    <div class="cardapio">
+  <h1>Pedido Online</h1>
+  <div class="cardapio">
       <img src="static/images/lanches.jpg" alt="Cardápio 1" onclick="abrirLightbox(this.src)">
       <img src="static/images/refri.jpg" alt="Cardápio 2" onclick="abrirLightbox(this.src)">
-    </div>
+  </div>
+
+  <h2 onclick="toggleCategoria('lanches')">Lanches</h2>
+  <div id="lanches" class="categoria"></div>
+  <button onclick="addItem('lanches')">Adicionar Lanche</button>
+
+  <h2 onclick="toggleCategoria('salgados')">Outros Salgados</h2>
+  <div id="salgados" class="categoria"></div>
+  <button onclick="addItem('salgados')">Adicionar Salgados</button>
+
+  <h2 onclick="toggleCategoria('doces')">Doces</h2>
+  <div id="doces" class="categoria"></div>
+  <button onclick="addItem('doces')">Adicionar Doce</button>
+
+  <h2 onclick="toggleCategoria('sucos')">Sucos</h2>
+  <div id="sucos" class="categoria" data-categoria="sucos"></div>
+  <button onclick="addItem('sucos')">Adicionar Suco</button>
+
+  <h2 onclick="toggleCategoria('refri')">Refrigerantes</h2>
+  <div id="refri" class="categoria" data-categoria="refri"></div>
+  <button onclick="addItem('refri')">Adicionar Refrigerante</button>
+
+  <div class="total" id="valor-total">Total: R$ 0,00</div>
+
+  <div class="container">
 
     <form id="pedido-form" action="/enviar-pedido" method="POST">
       <label for="whatsapp">Número do WhatsApp:</label>
       <input type="tel" id="whatsapp" name="whatsapp" required>
 
-      <label for="pedido">Pedido Completo: (Para Pastel e Cachorro quente, por favor informar se deseja verdura em
-        ambos)</label>
-      <textarea id="pedido" name="pedido" rows="4" required></textarea>
+      <label for="resumo-pedido">Resumo do pedido:</label>
+      <textarea id="resumo-pedido" name="pedido" rows="4" readonly></textarea>
 
       <label for="Endereço">Endereço com ponto de referência: </label>
       <textarea id="endereco" name="endereco" rows="2" required></textarea>
@@ -141,46 +65,6 @@
     <img id="lightbox-img" src="" alt="Imagem Ampliada">
   </div>
 
-  <script>
-    document.getElementById("pedido-form").addEventListener("submit", function (event) {
-      event.preventDefault();
-
-      const form = event.target;
-      const button = form.querySelector("button");
-
-      // Desativa o botão e muda o texto
-      button.disabled = true;
-      button.textContent = "Enviando pedido... Aguarde";
-
-      const formData = new FormData(form);
-      fetch("https://pedidos-backend-0ggt.onrender.com/enviar-pedido", {
-          method: "POST",
-          body: formData
-        })
-        .then(() => {
-          alert("Pedido enviado com sucesso!");
-          form.reset();
-        })
-        .catch(() => {
-          alert("Erro ao enviar pedido. Tente novamente.");
-        })
-        .finally(() => {
-          // Reativa o botão e volta o texto ao normal
-          button.disabled = false;
-          button.textContent = "Enviar Pedido";
-        });
-    });
-
-    function abrirLightbox(src) {
-      const lightbox = document.getElementById("lightbox");
-      const lightboxImg = document.getElementById("lightbox-img");
-      lightboxImg.src = src;
-      lightbox.style.display = "flex";
-    }
-
-    function fecharLightbox() {
-      document.getElementById("lightbox").style.display = "none";
-    }
-  </script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

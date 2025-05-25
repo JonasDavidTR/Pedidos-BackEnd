@@ -1,0 +1,137 @@
+body {
+  font-family: sans-serif;
+  background-color: #fffaf0;
+  color: #333;
+  padding: 10px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.container {
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #d4a017;
+}
+
+h2 {
+  background-color: #ffeaa7;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.cardapio {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.cardapio img {
+  width: 45%;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: transform 0.2s;
+}
+
+.cardapio img:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 600px) {
+  .cardapio img {
+    width: 100%;
+  }
+}
+
+/* Lightbox */
+.lightbox {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+}
+
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+label {
+  font-weight: bold;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  margin-top: 5px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.item {
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.categoria {
+  margin-top: 10px;
+  padding-left: 10px;
+  display: none;
+}
+
+.flex {
+  display: flex;
+  gap: 10px;
+}
+
+.flex > div {
+  flex: 1;
+}
+
+button {
+  background-color: #d4a017;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 5px;
+}
+
+button:hover {
+  background-color: #b98b14;
+}
+
+.total {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-top: 20px;
+}
