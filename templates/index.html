@@ -65,6 +65,25 @@
     <img id="lightbox-img" src="" alt="Imagem Ampliada">
   </div>
 
+<script>
+    document.querySelector("form").addEventListener("submit", function(event) {
+        // Espera um pouquinho pra garantir que o pedido seja enviado antes de recarregar
+        setTimeout(() => {
+            location.reload(); // recarrega a página (como se fosse um F5)
+        }, 500); // 0.5 segundo de atraso
+    });
+</script>
+
 <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+<script>
+  document.querySelector("form").addEventListener("submit", function(event) {
+      // Espera um pouquinho pra garantir que o pedido seja enviado antes de recarregar
+      setTimeout(() => {
+          location.reload(); // recarrega a página (como se fosse um F5)
+      }, 500); // 0.5 segundo de atraso
+  });
+</script>
+
 </body>
 </html>
