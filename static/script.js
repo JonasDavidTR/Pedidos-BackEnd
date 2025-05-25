@@ -121,11 +121,20 @@ function addItem(categoria) {
             <label>Sabor (selecione):</label>
             <select name="sabor" required>
                 <option value="">Escolher sabor</option>
-                <option value="Morango">Morango</option>
-                <option value="Acerola">Acerola</option>
-                <option value="Manga">Manga</option>
+                <option value="Graviola">Graviola</option>
                 <option value="Goiaba">Goiaba</option>
-                <option value="Cajá">Cajá</option>
+                <option value="Acerola">Acerola</option>
+                <option value="Maracujá">Maracujá</option>
+                <option value="Morango">Morango</option>
+                <option value="Manga">Manga</option>
+                <option value="Tangerina">Tangerina</option>
+                <option value="Abacaxi com Hortelã">Abacaxi com hortelã</option>
+                <option value="Abacaxi">Abacaxi</option>
+                <option value="Uva">Uva</option>
+                <option value="Açaí">Açaí</option>
+                <option value="Caju">Caju</option>
+                <option value="Pinha">Pinha</option>
+                <option value="Umbu">Umbu</option>
             </select>
             <label>Quantidade:</label><input type="number" name="qtd" value="1" min="1" required>
             <label>Com leite ou água?</label>
