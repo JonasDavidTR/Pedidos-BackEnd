@@ -16,7 +16,8 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
 .then(res => res.json())
 .then(data => {
     if (data.status === "sucesso") {
-        window.open(data.whatsapp_link, '_blank');  // Abre WhatsApp com mensagem pronta
+        //window.open(data.whatsapp_link, '_blank');  // Abre WhatsApp com mensagem pronta
+        window.location.href = data.whatsapp_link
         alert("Pedido enviado com sucesso!");
         form.reset();
         calcularTotal(); // reseta o total

@@ -126,6 +126,9 @@ def calcular_valor():
 
 @app.route("/enviar-pedido", methods=["POST"])
 def enviar_pedido():
+
+    referer = request.headers.get("Referer", "")
+    print("Referer recebido:", referer)
     referer = request.headers.get("Referer", "")
     if not referer.startswith("https://pedidos-backend-0ggt.onrender.com/"):
         return jsonify({"status": "erro", "mensagem": "Origem não autorizada"}), 403
