@@ -140,11 +140,12 @@ def enviar_pedido():
 
         # Monta mensagem resumida para WhatsApp
         mensagem = f"Olá! Aqui está o resumo do seu pedido feito em {timestamp}:\n\n"
+        mensagem += f'Numero: {whatsapp}\n'
         mensagem += f"Pedido: {pedido}\n"
         mensagem += f"Endereço: {endereco}\n"
         mensagem += f"Pagamento: {pagamento}\n\n"
-        mensagem += "Obrigado pela preferência!🍔🍟\n"
-        mensagem += "É só enviar que já está tudo certo."
+        mensagem += "É só enviar que já está tudo certo.\n"
+        mensagem += "Obrigado pela preferência!🍔🍟"
 
         # Escapa para URL
         mensagem_url = quote(mensagem)
