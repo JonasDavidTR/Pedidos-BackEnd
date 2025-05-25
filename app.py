@@ -150,7 +150,7 @@ def enviar_pedido():
         # Escapa para URL
         mensagem_url = quote(mensagem)
         #  Numero a para qual a mensagem será mandada
-        numero = '5587981796957'
+        numero = '5587981554312'
 
         # Salva na planilha
         sheet.append_row([timestamp, whatsapp, pedido, endereco, pagamento])
