@@ -3,6 +3,7 @@ import gspread
 import os
 from google.oauth2.service_account import Credentials
 from datetime import datetime, timedelta
+from urllib.parse import quote
 
 app = Flask(__name__)
 
@@ -125,7 +126,6 @@ def calcular_valor():
 
 @app.route("/enviar-pedido", methods=["POST"])
 def enviar_pedido():
-
     referer = request.headers.get("Referer", "")
     if not referer.startswith("https://pedidos-backend-0ggt.onrender.com/"):
         return jsonify({"status": "erro", "mensagem": "Origem não autorizada"}), 403
@@ -137,9 +137,29 @@ def enviar_pedido():
         pagamento = request.form["pagamento"]
 
         timestamp = (datetime.utcnow() - timedelta(hours=3)).strftime("%d/%m/%Y %H:%M:%S")
-        
+
+        # Monta mensagem resumida para WhatsApp
+        mensagem = f"Olá! Aqui está o resumo do seu pedido feito em {timestamp}:\n\n"
+        mensagem += f"Pedido: {pedido}\n"
+        mensagem += f"Endereço: {endereco}\n"
+        mensagem += f"Pagamento: {pagamento}\n\n"
+        mensagem += "Obrigado pela preferência!🍔🍟\n"
+        mensagem += "É só enviar que já está tudo certo."
+
+        # Escapa para URL
+        mensagem_url = quote(mensagem)
+
+        # Remove caracteres especiais do número
+        numero = ''.join(filter(str.isdigit, whatsapp))
+
+        # Salva na planilha
         sheet.append_row([timestamp, whatsapp, pedido, endereco, pagamento])
-        return jsonify({"status": "sucesso"}), 200
+
+        # Monta link do WhatsApp
+        link_whatsapp = f"https://wa.me/{numero}?text={mensagem_url}"
+
+        return jsonify({"status": "sucesso", "whatsapp_link": link_whatsapp}), 200
+
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 500
 

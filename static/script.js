@@ -11,21 +11,26 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
     const formData = new FormData(form);
     fetch("https://pedidos-backend-0ggt.onrender.com/enviar-pedido", {
         method: "POST",
-        body: formData
-    })
-    .then(() => {
+    body: formData
+})
+.then(res => res.json())
+.then(data => {
+    if (data.status === "sucesso") {
+        window.open(data.whatsapp_link, '_blank');  // Abre WhatsApp com mensagem pronta
         alert("Pedido enviado com sucesso!");
         form.reset();
         calcularTotal(); // reseta o total
-    })
-    .catch(() => {
-        alert("Erro ao enviar pedido. Tente novamente.");
-    })
-    .finally(() => {
-        // Reativa o botão e volta o texto ao normal
-        button.disabled = false;
-        button.textContent = "Enviar Pedido";
-    });
+    } else {
+        alert("Erro: " + data.mensagem);
+    }
+})
+.catch(() => {
+    alert("Erro ao enviar pedido. Tente novamente.");
+})
+.finally(() => {
+    button.disabled = false;
+    button.textContent = "Enviar Pedido";
+});
 });
 
 function abrirLightbox(src) {
