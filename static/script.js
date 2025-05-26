@@ -13,11 +13,31 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
         method: "POST",
     body: formData
 })
+
+document.addEventListener("DOMContentLoaded", () => {
+    const whatsappSalvo = localStorage.getItem("whatsapp");
+    const enderecoSalvo = localStorage.getItem("endereco");
+
+    if (whatsappSalvo) {
+        document.querySelector("input[name='whatsapp']").value = whatsappSalvo;
+    }
+
+    if (enderecoSalvo) {
+        document.querySelector("input[name='endereco']").value = enderecoSalvo;
+    }
+});
+
+
 .then(res => res.json())
 .then(data => {
     if (data.status === "sucesso") {
+        // Salva no localStorage
+        localStorage.setItem("whatsapp", form.whatsapp.value);
+        localStorage.setItem("endereco", form.endereco.value);
+
         //window.open(data.whatsapp_link, '_blank');  // Abre WhatsApp com mensagem pronta
         window.location.href = data.whatsapp_link
+        
         alert("Pedido enviado com sucesso!");
         form.reset();
         calcularTotal(); // reseta o total
