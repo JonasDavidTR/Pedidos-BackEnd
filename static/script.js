@@ -14,20 +14,6 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
     body: formData
 })
 
-document.addEventListener("DOMContentLoaded", () => {
-    const whatsappSalvo = localStorage.getItem("whatsapp");
-    const enderecoSalvo = localStorage.getItem("endereco");
-
-    if (whatsappSalvo) {
-        document.querySelector("input[name='whatsapp']").value = whatsappSalvo;
-    }
-
-    if (enderecoSalvo) {
-        document.querySelector("input[name='endereco']").value = enderecoSalvo;
-    }
-});
-
-
 .then(res => res.json())
 .then(data => {
     if (data.status === "sucesso") {
@@ -52,6 +38,20 @@ document.addEventListener("DOMContentLoaded", () => {
     button.disabled = false;
     button.textContent = "Enviar Pedido";
 });
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const whatsappSalvo = localStorage.getItem("whatsapp");
+    const enderecoSalvo = localStorage.getItem("endereco");
+
+    if (whatsappSalvo) {
+        document.querySelector("input[name='whatsapp']").value = whatsappSalvo;
+    }
+
+    if (enderecoSalvo) {
+        document.querySelector("input[name='endereco']").value = enderecoSalvo;
+    }
 });
 
 function abrirLightbox(src) {
