@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, Response
 import gspread
 import os
 from google.oauth2.service_account import Credentials
@@ -29,9 +29,107 @@ try:
 except Exception as e:
     raise Exception("Credenciais não encontradas ou inválidas. Detalhes: " + str(e))
 
-# Conecta à planilha
+
+#Atutenticador 
+# Usuário e senha que você quer proteger
+USERNAME = 'admin'
+PASSWORD = 'dl1'
+
+def check_auth(username, password):
+    return username == USERNAME and password == PASSWORD
+
+def authenticate():
+    # Retorna resposta 401 para disparar o popup de login do navegador
+    return Response(
+        'Acesso negado. Favor autenticar.', 401,
+        {'WWW-Authenticate': 'Basic realm="Login Required"'}
+    )
+
+def requires_auth(f):
+    def decorated(*args, **kwargs):
+        auth = request.authorization
+        if not auth or not check_auth(auth.username, auth.password):
+            return authenticate()
+        return f(*args, **kwargs)
+    # Preserve nome e docstring da função original
+    decorated.__name__ = f.__name__
+    decorated.__doc__ = f.__doc__
+    return decorated
+#///////////////////////////////
+
+
+
+# Conecta à planilha de pedidos
 client = gspread.authorize(creds)
 sheet = client.open("Pedidos_DegustLanches").sheet1
+
+# Conecta à planilha do cardápio
+sheet_disponibilidade = client.open("Cardapio_BancoDeDados").sheet1
+itens = sheet_disponibilidade.get_all_records()
+
+
+@app.route("/disponibilidade")
+def disponibilidade():
+    records = sheet_disponibilidade.get_all_records()
+
+    #Monta um dicionario com o nome do item que está disponivel
+    disponibilidade_dict = {}
+    for item in records:
+        nome = item['Nome'].lower().strip()
+        disponivel = item['Disponibilidade'].strip().lower() == 'SIM'
+        disponibilidade_dict[nome] = disponivel
+    return jsonify(disponibilidade_dict)
+
+
+
+@app.route("/atualizar-disponibilidade", methods=["POST"])
+@requires_auth
+def atualizar_disponibilidade():
+    try:
+        dados = request.get_json()
+        itens_recebidos = dados.get('itens', [])
+
+        gc = gspread.service_account(filename='GOOGLE_APPLICATION_CREDENTIALS_JSON')
+        sh = gc.open('Cardapio_BancoDeDados')
+        worksheet = sh.sheet1
+
+        registros = worksheet.get_all_records()
+
+        # Prepara nova coluna de disponibilidade para atualizar em lote
+        novas_disponibilidades = []
+
+        for registro in registros:
+            nome_item = registro['Nome']
+            # Busca o item correspondente recebido
+            item = next((item for item in itens_recebidos if item['nome'] == nome_item), None)
+            if item:
+                nova_disp = 'SIM' if item['disponibilidade'] else 'NÃO'
+            else:
+                nova_disp = registro['Disponibilidade']  # mantém o que está na planilha
+
+            novas_disponibilidades.append([nova_disp])
+
+        # Atualiza a coluna 3 (Disponibilidade), da linha 2 até o fim, em uma única requisição
+        worksheet.update(f'C2:C{len(novas_disponibilidades) + 1}', novas_disponibilidades)
+
+        return jsonify({'mensagem': 'Atualizado com sucesso'})
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({'erro': str(e)}), 500
+
+
+#/////////////////////////////////
+
+
+@app.route("/admin")
+@requires_auth
+def admin():
+    sheet_disponibilidade = client.open("Cardapio_BancoDeDados").sheet1
+    itens = sheet_disponibilidade.get_all_records()
+    return render_template("admin.html", itens=itens)
+
 
 @app.route("/", methods=["GET"])
 def home():
@@ -62,7 +160,6 @@ def calcular_valor():
 
     if not dados or not isinstance(dados, dict):
         return jsonify({"status": "erro", "mensagem": "Dados inválidos"}), 400
-
         
     try:
         pedido = dados.get('pedido', [])
@@ -80,7 +177,7 @@ def calcular_valor():
                 raise ValueError(f"Quantidade inválida para item: {sabor}")
 
             # Cálculo do preço
-            if sabor in ['queijo', 'carne', 'misto', 'frango', 'catupiry', 'cheddar']:
+            if sabor in ['queijo', 'carne', 'misto', 'frango','fqueijo', 'catupiry', 'cheddar']:
                 preco = precos['pastel']
             elif sabor == 'coxinha':
                 preco = precos['coxinha']
@@ -136,15 +233,14 @@ def enviar_pedido():
         endereco = request.form["endereco"]
         pagamento = request.form["pagamento"]
 
-        timestamp = (datetime.utcnow() - timedelta(hours=3)).strftime("%d/%m/%Y %H:%M:%S")
+        timestamp = (datetime.utcnow() - timedelta(hours=3)).strftime("%H:%M:%S")
 
         # Monta mensagem resumida para WhatsApp
-        mensagem = f"Olá! Aqui está o resumo do seu pedido feito em {timestamp}:\n\n"
+        mensagem = f"Resumo do pedido completo {timestamp}:\n\n"
         mensagem += f'Numero: {whatsapp}\n'
         mensagem += f"Pedido: {pedido}\n"
         mensagem += f"Endereço: {endereco}\n"
         mensagem += f"Pagamento: {pagamento}\n\n"
-        mensagem += "É só enviar que já está tudo certo.\n"
         mensagem += "Obrigado pela preferência!🍔🍟"
 
         # Escapa para URL

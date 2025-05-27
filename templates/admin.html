@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Cardápio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='adminStyle.css') }}" />
+</head>
+<body>
+  
+<h2>Configuração de Disponibilidade</h2>
+<form id="adminForm">
+  {% set categorias = ['Pastel', 'Salgado', 'Doce', 'Suco', 'Refri'] %}
+
+  {% for categoria in categorias %}
+    <h3>{{ categoria }}</h3>
+    <div class="itens-container">
+      {% for item in itens if item.Categoria == categoria %}
+        <div class="item">
+          <label>
+            <input type="checkbox" name="{{ item.Nome }}" {% if item.Disponibilidade.lower() in ['sim', 'true'] %}checked{% endif %}>
+            {{ item.Nome }}
+          </label>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+
+  <div style="text-align: center;">
+    <button type="submit">Salvar</button>
+    <button type="button" id="resetBtn">Resetar</button>
+  </div>
+</form>
+
+<script>
+  const adminForm = document.getElementById('adminForm');
+const resetBtn = document.getElementById('resetBtn');
+
+adminForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const dados = {};
+  adminForm.querySelectorAll('input[type=checkbox]').forEach(cb => {
+    dados[cb.name] = cb.checked;
+  });
+
+  const itens = Object.entries(dados).map(([nome, disponibilidade]) => ({
+    nome,
+    disponibilidade
+  }));
+
+  fetch('/atualizar-disponibilidade', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ itens })
+  })
+  .then(res => {
+    if (!res.ok) throw new Error('Erro ao salvar');
+    return res.json();
+  })
+  .then(data => {
+    alert(data.mensagem || 'Configurações salvas com sucesso!');
+  })
+  .catch(err => {
+    console.error(err);
+    alert('Erro ao salvar configurações.');
+  });
+});
+
+resetBtn.addEventListener('click', () => {
+  if (confirm('Tem certeza que deseja resetar todas as configurações?')) {
+    adminForm.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = false);
+    alert('Configurações resetadas!');
+  }
+});
+</script>
+
+</body>
+</html>

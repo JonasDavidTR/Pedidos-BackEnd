@@ -50,8 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (enderecoSalvo) {
-        document.querySelector("input[name='endereco']").value = enderecoSalvo;
+        document.querySelector("[name='endereco']").value = enderecoSalvo;
     }
+
 });
 
 function abrirLightbox(src) {
@@ -88,9 +89,61 @@ function toggleCategoria(id) {
     cat.style.display = cat.style.display === 'none' ? 'block' : 'none';
 }
 
-function addItem(categoria) {
+
+
+
+
+
+let disponibilidadeGlobal = {}; // variável global para armazenar disponibilidade
+
+async function carregarDisponibilidade() {
+    try {
+        const res = await fetch('http://127.0.0.1:5000/disponibilidade');
+        if (!res.ok) throw new Error('Erro ao buscar disponibilidade');
+        disponibilidadeGlobal = await res.json();
+    } catch (e) {
+        console.error(e);
+        disponibilidadeGlobal = {};
+    }
+}
+
+function aplicarIndisponibilidade(select) {
+    for (const opt of select.options) {
+        const val = opt.value.toLowerCase().trim();
+        if (val === "" || val === "br") continue;
+
+        if (disponibilidadeGlobal[val] === false) {
+            opt.disabled = true;
+            opt.style.textDecoration = 'line-through';
+            opt.style.opacity = '0.5';
+            if (!opt.text.includes('(indisponível)')) {
+                opt.text += ' (indisponível)';
+            }
+        } else {
+            opt.disabled = false;
+            opt.style.textDecoration = '';
+            opt.style.opacity = '';
+            opt.text = opt.text.replace(' (indisponível)', '');
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+async function addItem(categoria) {
     const div = document.getElementById(categoria);
-    div.style.display = 'block'; // Sempre abre ao adicionar item
+    div.style.display = 'block'; // Sempre mostra a categoria
+
+    // Carrega a disponibilidade antes de criar o item
+    if (Object.keys(disponibilidadeGlobal).length === 0) {
+        await carregarDisponibilidade();
+    }
 
     const item = document.createElement('div');
     item.className = 'item';
@@ -106,8 +159,10 @@ function addItem(categoria) {
                 <option value="Carne">Carne</option>
                 <option value="Frango">Frango</option>
                 <option value="Misto">Misto</option>
-                <option value="Catupiry">Catupiry</option>
-                <option value="Cheddar">Cheddar</option>
+                <option value="fQueijo">Frango com Queijo</option>
+                <option value="Catupiry">Frango com Catupiry</option>
+                <option value="Cheddar">Frango com Cheddar</option>
+                <option value="br">-------------</option>
                 <option value="hotdog">Cachorro quente</option>
             </select>
             <label>Quantidade:</label><input type="number" name="qtd" value="1" min="1" required>
@@ -159,6 +214,7 @@ function addItem(categoria) {
                 <option value="Uva">Uva</option>
                 <option value="Açaí">Açaí</option>
                 <option value="Caju">Caju</option>
+                <option value="Caja">Cajá</option>
                 <option value="Pinha">Pinha</option>
                 <option value="Umbu">Umbu</option>
             </select>
@@ -172,34 +228,78 @@ function addItem(categoria) {
             <button type="button" onclick="this.parentElement.remove(); calcularTotal()">Remover</button>`;
     } else if (categoria === 'refri') {
         html = `
-            <label>Refrigerante (selecione):</label>
-            <select name="sabor" required>
-                <option value="">Escolher refri</option>
-                <option value="coca">Coca Cola</option>
-                <option value="guarana">Guaraná</option>
-                <option value="fanta">Fanta</option>
-                <option value="pepsi">Pepsi</option>
-                <option value="uva">Uva</option>
-                <option value="limao">Limão</option>
-            </select>
-            <label>De qual tamanho?</label>
-            <select name="tamanho" required>
-                <option value="juininho">Juininho</option>
-                <option value="lata">Lata</option>
-                <option value="1Litro">1 Litro</option>
-                <option value="2Litros">2 Litros</option>
-            </select>
-            <label>Quantidade:</label><input type="number" name="qtd" value="1" min="1" required>
-            <label>Observações:</label><textarea name="obs" placeholder="Ex: bem gelado"></textarea>
-            <button type="button" onclick="this.parentElement.remove(); calcularTotal()">Remover</button>`;
+        <label>Refrigerante (selecione):</label>
+        <select name="sabor" required>
+            <option value="">Escolher refri</option>
+            <option value="Coca">Coca Cola</option>
+            <option value="Guarana">Guaraná</option>
+            <option value="Fanta">Fanta</option>
+            <option value="Pepsi">Pepsi</option>
+            <option value="Uva">Uva</option>
+            <option value="Limao">Limão</option>
+        </select>
+        <label>De qual tamanho?</label>
+        <select name="tamanho" required>
+            <option value="Juininho">Juininho</option>
+            <option value="Lata">Lata</option>
+            <option value="1Litro">1 Litro</option>
+            <option value="2Litros">2 Litros</option>
+        </select>
+        <label>Quantidade:</label><input type="number" name="qtd" value="1" min="1" required>
+        <label>Observações:</label><textarea name="obs" placeholder="Ex: bem gelado"></textarea>
+        <button type="button" onclick="this.parentElement.remove(); calcularTotal()">Remover</button>
+    `;
     }
 
     item.innerHTML = html;
-    item.querySelectorAll('input, select, textarea').forEach(e =>
-        e.addEventListener('change', calcularTotal)
-    );
+
+    
+// // Aplica indisponibilidade nas opções de sabor
+    const selectSabor = item.querySelector('select[name="sabor"]');
+    if (selectSabor) aplicarIndisponibilidade(selectSabor);
+
+    // Adiciona event listeners para recalcular total quando qualquer input mudar
+    item.querySelectorAll('input, select, textarea').forEach(el => {
+        el.addEventListener('change', calcularTotal);
+    });
+
     div.appendChild(item);
     calcularTotal();
+}
+
+    // Função para carregar disponibilidade do backend
+    async function carregarDisponibilidade() {
+        try {
+            const res = await fetch('https://pedidos-backend-0ggt.onrender.com/disponibilidade');
+            if (!res.ok) throw new Error('Erro ao buscar disponibilidade');
+            disponibilidadeGlobal = await res.json();
+        } catch (e) {
+            console.error(e);
+            disponibilidadeGlobal = {};
+        }
+    }
+
+    // Função para aplicar indisponibilidade (igual à sua)
+    function aplicarIndisponibilidade(select) {
+        for (const opt of select.options) {
+            const val = opt.value.toLowerCase().trim();
+            if (val === "" || val === "br") continue;
+
+            if (disponibilidadeGlobal[val] === false) {
+                opt.disabled = true;
+                opt.style.textDecoration = 'line-through';
+                opt.style.opacity = '0.5';
+                if (!opt.text.includes('(indisponível)')) {
+                    opt.text += ' (indisponível)';
+                }
+            } else {
+                opt.disabled = false;
+                opt.style.textDecoration = '';
+                opt.style.opacity = '';
+                opt.text = opt.text.replace(' (indisponível)', '');
+            }
+        }
+
 }
 
 function gerarResumo() {
@@ -244,6 +344,7 @@ function gerarResumo() {
 
     return { resumo, pedido };
 }
+
 
 // Função para enviar o pedido para backend e pegar o valor total calculado
 async function buscarValorTotal(pedido) {
