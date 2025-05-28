@@ -16,7 +16,7 @@ scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis
 cred_json = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
 
 try:
-        
+
     if cred_json:
         # Ambiente de produção
         from io import StringIO
@@ -90,14 +90,21 @@ def atualizar_disponibilidade():
         dados = request.get_json()
         itens_recebidos = dados.get('itens', [])
 
-        gc = gspread.service_account(filename='GOOGLE_APPLICATION_CREDENTIALS_JSON')
-        # gc = gspread.service_account(filename='credenciais.json')
+        # Lê o conteúdo do JSON diretamente da variável de ambiente
+        cred_json = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
+        if not cred_json:
+            raise ValueError("Variável de ambiente GOOGLE_APPLICATION_CREDENTIALS_JSON não encontrada")
+
+        info = json.loads(cred_json)
+        scopes = ["https://www.googleapis.com/auth/spreadsheets"]
+        creds = Credentials.from_service_account_info(info, scopes=scopes)
+        gc = gspread.authorize(creds)
+
         sh = gc.open('Cardapio_BancoDeDados')
         worksheet = sh.sheet1
 
         registros = worksheet.get_all_records()
 
-        # Prepara nova coluna de disponibilidade para atualizar em lote
         novas_disponibilidades = []
 
         for registro in registros:
