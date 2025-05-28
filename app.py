@@ -96,7 +96,7 @@ def atualizar_disponibilidade():
             raise ValueError("Variável de ambiente GOOGLE_APPLICATION_CREDENTIALS_JSON não encontrada")
 
         info = json.loads(cred_json)
-        scopes = ["https://www.googleapis.com/auth/spreadsheets"]
+        scopes = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
         creds = Credentials.from_service_account_info(info, scopes=scopes)
         gc = gspread.authorize(creds)
 
