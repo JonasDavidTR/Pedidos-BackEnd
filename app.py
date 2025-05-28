@@ -4,10 +4,10 @@ import os
 from google.oauth2.service_account import Credentials
 from datetime import datetime, timedelta
 from urllib.parse import quote
-from flask_cors import CORS
+# from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, origins=["https://pedidos-backend-0ggt.onrender.com"])
+# CORS(app, origins=["https://pedidos-backend-0ggt.onrender.com"])
 
 # escopo da API
 scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
