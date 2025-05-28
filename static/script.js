@@ -1,3 +1,16 @@
+
+let tempoInativo = 0;
+setInterval(() => {
+    tempoInativo += 1;
+    if (tempoInativo >= 15) { // 15 minutos
+        location.reload(); // atualiza a página
+    }
+}, 60000); // 1 minuto
+
+document.addEventListener('mousemove', () => tempoInativo = 0);
+document.addEventListener('keydown', () => tempoInativo = 0);
+
+
 document.getElementById("pedido-form").addEventListener("submit", function(event) {
     event.preventDefault();
 
@@ -78,9 +91,10 @@ const precos = {
     beijinho: 1.00,
     sucoLeite: 4.00,
     sucoAgua: 3.50,
-    coca: { juininho: 3, lata: 5, '1Litro': 7, '2Litros': 12 },
-    guarana: { juininho: 2, lata: 4, '1Litro': 6, '2Litros': 10 },
-    outros: { juininho: 2, lata: 4 }
+    coca: { Juininho: 3, Lata: 5, '1L': 7, '2L': 12 },
+    fanta: { Juininho: 2, Lata: 5, '1L': 7, '2L': 12},
+    guarana: { Juininho: 2, Lata: 4, '1L': 6, '2L': 10 },
+    outros: { Juininho: 2, Lata: 4 }
 };
 
 function toggleCategoria(id) {
@@ -90,15 +104,10 @@ function toggleCategoria(id) {
 }
 
 
-
-
-
-
-let disponibilidadeGlobal = {}; // variável global para armazenar disponibilidade
-
+let disponibilidadeGlobal = {}; // variável global para armazenar disponibilidade do cardápio
 async function carregarDisponibilidade() {
     try {
-        const res = await fetch('http://127.0.0.1:5000/disponibilidade');
+        const res = await fetch('https://pedidos-backend-0ggt.onrender.com/disponibilidade');
         if (!res.ok) throw new Error('Erro ao buscar disponibilidade');
         disponibilidadeGlobal = await res.json();
     } catch (e) {
@@ -129,10 +138,28 @@ function aplicarIndisponibilidade(select) {
 }
 
 
+// Área dos refri. Mostra se está ou não disponível no cardápio
+function atualizarTamanhos(selectSabor, selectTamanho) {
+    const sabor = selectSabor.value;
+    for (const opt of selectTamanho.options) {
+        const chave = `${sabor}-${opt.value}`.toLowerCase();
+        const disponivel = disponibilidadeGlobal[chave];
 
-
-
-
+        if (disponivel === false) {
+            opt.disabled = true;
+            
+            opt.style.opacity = '0.5';
+            if (!opt.text.includes('(indisponível)')) {
+                opt.text += ' (indisponível)';
+            }
+        } else {
+            opt.disabled = false;
+            opt.style.textDecoration = '';
+            opt.style.opacity = '';
+            opt.text = opt.text.replace(' (indisponível)', '');
+        }
+    }
+}
 
 
 
@@ -178,8 +205,8 @@ async function addItem(categoria) {
             <label>Sabor (selecione):</label>
             <select name="sabor" required>
                 <option value="">Escolher Salgado</option>
-                <option value="enroladinho">Enroladinho</option>
-                <option value="coxinha">Coxinha</option>
+                <option value="Enroladinho">Enroladinho</option>
+                <option value="Coxinha">Coxinha</option>
             </select>
             <label>Quantidade:</label><input type="number" name="qtd" value="1" min="1" required>
             <button type="button" onclick="this.parentElement.remove(); calcularTotal()">Remover</button>`;
@@ -205,15 +232,16 @@ async function addItem(categoria) {
                 <option value="Graviola">Graviola</option>
                 <option value="Goiaba">Goiaba</option>
                 <option value="Acerola">Acerola</option>
-                <option value="Maracujá">Maracujá</option>
+                <option value="Maracuja">Maracujá</option>
                 <option value="Morango">Morango</option>
                 <option value="Manga">Manga</option>
                 <option value="Tangerina">Tangerina</option>
-                <option value="Abacaxi com Hortelã">Abacaxi com hortelã</option>
+                <option value="AbacaxiHortela">Abacaxi com hortelã</option>
                 <option value="Abacaxi">Abacaxi</option>
                 <option value="Uva">Uva</option>
-                <option value="Açaí">Açaí</option>
+                <option value="Acai">Açaí</option>
                 <option value="Caju">Caju</option>
+                <option value="Caja">Cajá</option>
                 <option value="Caja">Cajá</option>
                 <option value="Pinha">Pinha</option>
                 <option value="Umbu">Umbu</option>
@@ -242,10 +270,10 @@ async function addItem(categoria) {
         <select name="tamanho" required>
             <option value="Juininho">Juininho</option>
             <option value="Lata">Lata</option>
-            <option value="1Litro">1 Litro</option>
-            <option value="2Litros">2 Litros</option>
+            <option value="1L">1 Litro</option>
+            <option value="2L">2 Litros</option>
         </select>
-        <label>Quantidade:</label><input type="number" name="qtd" value="1" min="1" required>
+        <label>Quantidade:</label><input type="number" name="qtd" value="1" min="1" max="4" required>
         <label>Observações:</label><textarea name="obs" placeholder="Ex: bem gelado"></textarea>
         <button type="button" onclick="this.parentElement.remove(); calcularTotal()">Remover</button>
     `;
@@ -256,7 +284,14 @@ async function addItem(categoria) {
     
 // // Aplica indisponibilidade nas opções de sabor
     const selectSabor = item.querySelector('select[name="sabor"]');
+    const selectTamanho = item.querySelector('select[name="tamanho"]');
     if (selectSabor) aplicarIndisponibilidade(selectSabor);
+    if (selectTamanho){
+        selectSabor.addEventListener('change', () => {
+            atualizarTamanhos(selectSabor, selectTamanho);
+        });
+    }
+
 
     // Adiciona event listeners para recalcular total quando qualquer input mudar
     item.querySelectorAll('input, select, textarea').forEach(el => {
@@ -267,44 +302,10 @@ async function addItem(categoria) {
     calcularTotal();
 }
 
-    // Função para carregar disponibilidade do backend
-    async function carregarDisponibilidade() {
-        try {
-            const res = await fetch('https://pedidos-backend-0ggt.onrender.com/disponibilidade');
-            if (!res.ok) throw new Error('Erro ao buscar disponibilidade');
-            disponibilidadeGlobal = await res.json();
-        } catch (e) {
-            console.error(e);
-            disponibilidadeGlobal = {};
-        }
-    }
-
-    // Função para aplicar indisponibilidade (igual à sua)
-    function aplicarIndisponibilidade(select) {
-        for (const opt of select.options) {
-            const val = opt.value.toLowerCase().trim();
-            if (val === "" || val === "br") continue;
-
-            if (disponibilidadeGlobal[val] === false) {
-                opt.disabled = true;
-                opt.style.textDecoration = 'line-through';
-                opt.style.opacity = '0.5';
-                if (!opt.text.includes('(indisponível)')) {
-                    opt.text += ' (indisponível)';
-                }
-            } else {
-                opt.disabled = false;
-                opt.style.textDecoration = '';
-                opt.style.opacity = '';
-                opt.text = opt.text.replace(' (indisponível)', '');
-            }
-        }
-
-}
-
+// Gera um resumo em tempo real do pedido
 function gerarResumo() {
     let resumo = "";
-    let pedido = [];  // Array que vai armazenar itens para enviar ao backend
+    let pedido = [];  // armazenamento dos itens
 
     document.querySelectorAll('.categoria .item').forEach((item) => {
         const sabor = item.querySelector('[name=sabor]').value.trim();
@@ -317,8 +318,13 @@ function gerarResumo() {
         const categoria = item.closest('.categoria')?.dataset.categoria || "";
         const selectTamanhoRefri = item.querySelector('[name=tamanho]');
         const tamanhoRefri = selectTamanhoRefri ? selectTamanhoRefri.value : "";
+        
+        const chaveDisponibilidade = `${sabor}-${tamanhoRefri}`;
+        const chave = chaveDisponibilidade.toLowerCase();
+        const disponivel = categoria === 'refri' ? disponibilidadeGlobal[chave] : true;
 
-        if (qtd > 0 && sabor) {
+        console.log(disponivel)
+        if (qtd > 0 && sabor && disponivel) {
             resumo += `${qtd}x ${sabor}`;
             if (completo === 'sim') resumo += " (completo)";
             if (categoria === 'sucos' && leiteOuAgua) {
@@ -346,6 +352,7 @@ function gerarResumo() {
 }
 
 
+
 // Função para enviar o pedido para backend e pegar o valor total calculado
 async function buscarValorTotal(pedido) {
     try {
@@ -368,7 +375,7 @@ async function buscarValorTotal(pedido) {
     }
 }
 
-// Exemplo de uso ao montar o pedido (você pode ligar essa função ao evento de mudança do pedido)
+// Monta o pedido na tela do usuario
 async function atualizarResumoEValor() {
     const { resumo, pedido } = gerarResumo();
     document.getElementById('resumo-pedido').textContent = resumo;

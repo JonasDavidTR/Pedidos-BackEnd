@@ -4,9 +4,10 @@ import os
 from google.oauth2.service_account import Credentials
 from datetime import datetime, timedelta
 from urllib.parse import quote
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+CORS(app, origins=["https://pedidos-backend-0ggt.onrender.com"])
 
 # escopo da API
 scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
@@ -76,12 +77,12 @@ def disponibilidade():
     disponibilidade_dict = {}
     for item in records:
         nome = item['Nome'].lower().strip()
-        disponivel = item['Disponibilidade'].strip().lower() == 'SIM'
+        disponivel = item['Disponibilidade'].strip().lower() == 'sim'
         disponibilidade_dict[nome] = disponivel
     return jsonify(disponibilidade_dict)
 
 
-
+#admin page
 @app.route("/atualizar-disponibilidade", methods=["POST"])
 @requires_auth
 def atualizar_disponibilidade():
@@ -89,7 +90,8 @@ def atualizar_disponibilidade():
         dados = request.get_json()
         itens_recebidos = dados.get('itens', [])
 
-        gc = gspread.service_account(filename='GOOGLE_APPLICATION_CREDENTIALS_JSON')
+        # gc = gspread.service_account(filename='GOOGLE_APPLICATION_CREDENTIALS_JSON')
+        gc = gspread.service_account(filename='credenciais.json')
         sh = gc.open('Cardapio_BancoDeDados')
         worksheet = sh.sheet1
 
@@ -149,9 +151,10 @@ precos = {
     'beijinho': 1.00,
     'sucoLeite': 4.00,
     'sucoAgua': 3.50,
-    'coca': {'juininho': 3.00, 'lata': 5.00, '1Litro': 7.00, '2Litros': 12.00},
-    'guarana': {'juininho': 2.00, 'lata': 4.00, '1Litro': 6.00, '2Litros': 10.00},
-    'outros': {'juininho': 2.00, 'lata': 4.00}  # pepsi/uva/limao
+    'coca': {'Juininho': 3.00, 'Lata': 5.00, '1L': 7.00, '2L': 12.00},
+    'fanta': {'Juininho': 2.00, 'Lata': 5.00, '1L': 7.00, '2L': 12.00},
+    'guarana': {'Juininho': 2.00, 'Lata': 4.00, '1L': 6.00, '2L': 10.00},
+    'outros': {'Juininho': 2.00, 'Lata': 4.00}  # pepsi/uva/limao
 }
 
 @app.route("/calcular-valor", methods=["POST"])
@@ -203,8 +206,10 @@ def calcular_valor():
                 else:
                     raise ValueError("Tipo de suco inválido")
             elif categoria == 'refri':
-                if sabor in ['coca', 'fanta']:
+                if sabor == 'coca':
                     tabela = precos['coca']
+                elif sabor == 'fanta':
+                    tabela = precos['fanta']
                 elif sabor == 'guarana':
                     tabela = precos['guarana']
                 else:
@@ -233,7 +238,7 @@ def enviar_pedido():
         endereco = request.form["endereco"]
         pagamento = request.form["pagamento"]
 
-        timestamp = (datetime.utcnow() - timedelta(hours=3)).strftime("%H:%M:%S")
+        timestamp = (datetime.utcnow() - timedelta(hours=3)).strftime("%D:%M:%Y:%H:%M:%S")
 
         # Monta mensagem resumida para WhatsApp
         mensagem = f"Resumo do pedido completo {timestamp}:\n\n"

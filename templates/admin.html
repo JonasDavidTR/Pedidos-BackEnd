@@ -34,46 +34,46 @@
 
 <script>
   const adminForm = document.getElementById('adminForm');
-const resetBtn = document.getElementById('resetBtn');
+  const resetBtn = document.getElementById('resetBtn');
 
-adminForm.addEventListener('submit', e => {
-  e.preventDefault();
-  const dados = {};
-  adminForm.querySelectorAll('input[type=checkbox]').forEach(cb => {
-    dados[cb.name] = cb.checked;
+  adminForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const dados = {};
+    adminForm.querySelectorAll('input[type=checkbox]').forEach(cb => {
+      dados[cb.name] = cb.checked;
+    });
+
+    const itens = Object.entries(dados).map(([nome, disponibilidade]) => ({
+      nome,
+      disponibilidade
+    }));
+
+    fetch('https://pedidos-backend-0ggt.onrender.com/atualizar-disponibilidade', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ itens })
+    })
+    .then(res => {
+      if (!res.ok) throw new Error('Erro ao salvar');
+      return res.json();
+    })
+    .then(data => {
+      alert(data.mensagem || 'Configurações salvas com sucesso!');
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Erro ao salvar configurações.');
+    });
   });
 
-  const itens = Object.entries(dados).map(([nome, disponibilidade]) => ({
-    nome,
-    disponibilidade
-  }));
-
-  fetch('https://pedidos-backend-0ggt.onrender.com/atualizar-disponibilidade', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ itens })
-  })
-  .then(res => {
-    if (!res.ok) throw new Error('Erro ao salvar');
-    return res.json();
-  })
-  .then(data => {
-    alert(data.mensagem || 'Configurações salvas com sucesso!');
-  })
-  .catch(err => {
-    console.error(err);
-    alert('Erro ao salvar configurações.');
+  resetBtn.addEventListener('click', () => {
+    if (confirm('Tem certeza que deseja resetar todas as configurações?')) {
+      adminForm.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = false);
+      alert('Configurações resetadas!');
+    }
   });
-});
-
-resetBtn.addEventListener('click', () => {
-  if (confirm('Tem certeza que deseja resetar todas as configurações?')) {
-    adminForm.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = false);
-    alert('Configurações resetadas!');
-  }
-});
 </script>
 
 </body>
