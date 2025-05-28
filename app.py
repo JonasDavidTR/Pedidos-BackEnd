@@ -90,8 +90,8 @@ def atualizar_disponibilidade():
         dados = request.get_json()
         itens_recebidos = dados.get('itens', [])
 
-        # gc = gspread.service_account(filename='GOOGLE_APPLICATION_CREDENTIALS_JSON')
-        gc = gspread.service_account(filename='credenciais.json')
+        gc = gspread.service_account(filename='GOOGLE_APPLICATION_CREDENTIALS_JSON')
+        # gc = gspread.service_account(filename='credenciais.json')
         sh = gc.open('Cardapio_BancoDeDados')
         worksheet = sh.sheet1
 
