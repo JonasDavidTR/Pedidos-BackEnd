@@ -7,7 +7,7 @@ from urllib.parse import quote
 # from flask_cors import CORS
 
 app = Flask(__name__)
-# CORS(app, origins=["https://pedidos-backend-0ggt.onrender.com"])
+# CORS(app, origins=["http://127.0.0.1:5000/"])
 
 # escopo da API
 scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
@@ -92,9 +92,9 @@ def atualizar_disponibilidade():
 
         # Lê o conteúdo do JSON diretamente da variável de ambiente
         cred_json = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
+        # cred_json = os.getenv("credenciais.json")
         if not cred_json:
             raise ValueError("Variável de ambiente GOOGLE_APPLICATION_CREDENTIALS_JSON não encontrada")
-
         info = json.loads(cred_json)
         scopes = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
         creds = Credentials.from_service_account_info(info, scopes=scopes)
@@ -161,7 +161,7 @@ precos = {
     'coca': {'Juininho': 3.00, 'Lata': 5.00, '1L': 7.00, '2L': 12.00},
     'fanta': {'Juininho': 2.00, 'Lata': 5.00, '1L': 7.00, '2L': 12.00},
     'guarana': {'Juininho': 2.00, 'Lata': 4.00, '1L': 6.00, '2L': 10.00},
-    'outros': {'Juininho': 2.00, 'Lata': 4.00}  # pepsi/uva/limao
+    'outros': {'Juininho': 2.00, 'Lata': 4.00, '1l': 6.00, '2l': 10.00}  # pepsi/uva/limao
 }
 
 @app.route("/calcular-valor", methods=["POST"])
@@ -183,8 +183,8 @@ def calcular_valor():
             categoria = item.get('categoria', '')
             tamanhoRefri = item.get('tamanhoRefri', '')
 
-            if qtd <= 0 or qtd > 30:
-                raise ValueError(f"Quantidade inválida para item: {sabor}")
+            if qtd <= 0 or qtd > 50:
+                raise ValueError(f"Quantidade inválida de: {sabor}")
 
             # Cálculo do preço
             if sabor in ['queijo', 'carne', 'misto', 'frango','fqueijo', 'catupiry', 'cheddar']:
@@ -237,6 +237,7 @@ def calcular_valor():
 def enviar_pedido():
     referer = request.headers.get("Referer", "")
     if not referer.startswith("https://pedidos-backend-0ggt.onrender.com/"):
+    # if not referer.startswith("http://127.0.0.1:5000/"):
         return jsonify({"status": "erro", "mensagem": "Origem não autorizada"}), 403
 
     try:

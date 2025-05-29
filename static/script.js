@@ -94,7 +94,7 @@ const precos = {
     coca: { Juininho: 3, Lata: 5, '1L': 7, '2L': 12 },
     fanta: { Juininho: 2, Lata: 5, '1L': 7, '2L': 12},
     guarana: { Juininho: 2, Lata: 4, '1L': 6, '2L': 10 },
-    outros: { Juininho: 2, Lata: 4 }
+    outros: { Juininho: 2, Lata: 4, '1L': 6, '2L': 10 }
 };
 
 function toggleCategoria(id) {
@@ -323,6 +323,7 @@ function gerarResumo() {
         const chave = chaveDisponibilidade.toLowerCase();
         const disponivel = categoria === 'refri' ? disponibilidadeGlobal[chave] : true;
 
+        
         console.log(disponivel)
         if (qtd > 0 && sabor && disponivel) {
             resumo += `${qtd}x ${sabor}`;
