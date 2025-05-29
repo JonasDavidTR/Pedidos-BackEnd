@@ -323,8 +323,6 @@ function gerarResumo() {
         const chave = chaveDisponibilidade.toLowerCase();
         const disponivel = categoria === 'refri' ? disponibilidadeGlobal[chave] : true;
 
-        
-        console.log(disponivel)
         if (qtd > 0 && sabor && disponivel) {
             resumo += `${qtd}x ${sabor}`;
             if (completo === 'sim') resumo += " (completo)";
