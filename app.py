@@ -183,7 +183,7 @@ def calcular_valor():
             categoria = item.get('categoria', '')
             tamanhoRefri = item.get('tamanhoRefri', '')
 
-            if qtd <= 0 or qtd > 50:
+            if qtd <= 0 or qtd > 30:
                 raise ValueError(f"Quantidade inválida para item: {sabor}")
 
             # Cálculo do preço

@@ -192,7 +192,7 @@ async function addItem(categoria) {
                 <option value="br">-------------</option>
                 <option value="hotdog">Cachorro quente</option>
             </select>
-            <label>Quantidade:</label><input type="number" name="qtd" value="1" min="1" required>
+            <label>Quantidade:</label><input type="number" name="qtd" value="1" min="1" max="50" required>
             <label>Completo (molhos e verdura)?</label>
             <select name="completo">
                 <option value="sim">Sim</option>
@@ -208,7 +208,7 @@ async function addItem(categoria) {
                 <option value="Enroladinho">Enroladinho</option>
                 <option value="Coxinha">Coxinha</option>
             </select>
-            <label>Quantidade:</label><input type="number" name="qtd" value="1" min="1" required>
+            <label>Quantidade:</label><input type="number" name="qtd" value="1" min="1" max="50" required>
             <button type="button" onclick="this.parentElement.remove(); calcularTotal()">Remover</button>`;
     } else if (categoria === 'doces') {
         html = `
@@ -221,7 +221,7 @@ async function addItem(categoria) {
                 <option value="Brigadeiro">Brigadeiro</option>
                 <option value="Beijinho">Beijinho</option>
             </select>
-            <label>Quantidade:</label><input type="number" name="qtd" value="1" min="1" required>
+            <label>Quantidade:</label><input type="number" name="qtd" value="1" min="1" max="50" required>
             <label>Observações:</label><textarea name="obs" placeholder="Ex: Sem talher, sabor da trufa..."></textarea>
             <button type="button" onclick="this.parentElement.remove(); calcularTotal()">Remover</button>`;
     } else if (categoria === 'sucos') {
@@ -246,7 +246,7 @@ async function addItem(categoria) {
                 <option value="Pinha">Pinha</option>
                 <option value="Umbu">Umbu</option>
             </select>
-            <label>Quantidade:</label><input type="number" name="qtd" value="1" min="1" required>
+            <label>Quantidade:</label><input type="number" name="qtd" value="1" min="1" max="50" required>
             <label>Com leite ou água?</label>
             <select name="leiteOuAgua">
                 <option value="leite">Leite</option>
@@ -380,7 +380,33 @@ async function atualizarResumoEValor() {
     const { resumo, pedido } = gerarResumo();
     document.getElementById('resumo-pedido').textContent = resumo;
 
-    const valorTotal = await buscarValorTotal(pedido);
-    document.getElementById('valor-total').textContent = `R$ ${valorTotal.toFixed(2)}`;
+    try {
+        const resposta = await fetch("/calcular-valor", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ pedido }),
+        });
+
+        const data = await resposta.json();
+
+        if (data.status === "sucesso") {
+            document.getElementById('valor-total').textContent = `R$ ${data.valorTotal.toFixed(2)}`;
+        } else {
+            // Erro retornado pelo backend (ex: quantidade inválida)
+            alert("Erro: " + data.mensagem);
+
+            // Limpa o resumo e o valor total
+            document.getElementById('resumo-pedido').textContent = "";
+            document.getElementById('valor-total').textContent = "R$ 0.00";
+        }
+    } catch (error) {
+        // Erro de rede ou do servidor
+        alert("Erro ao calcular valor. Tente novamente.");
+        document.getElementById('resumo-pedido').textContent = "";
+        document.getElementById('valor-total').textContent = "R$ 0.00";
+    }
 }
+
 const calcularTotal = atualizarResumoEValor;
