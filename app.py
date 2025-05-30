@@ -33,8 +33,8 @@ except Exception as e:
 
 #Atutenticador 
 # Usuário e senha que você quer proteger
-USERNAME = 'admin'
-PASSWORD = 'dl1'
+USERNAME = os.getenv("USERNAME")
+PASSWORD = os.getenv("PASSWD")
 
 def check_auth(username, password):
     return username == USERNAME and password == PASSWORD
@@ -246,12 +246,12 @@ def enviar_pedido():
         endereco = request.form["endereco"]
         pagamento = request.form["pagamento"]
 
-        timestamp = (datetime.utcnow() - timedelta(hours=3)).strftime("%D:%M:%Y:%H:%M:%S")
+        timestamp = (datetime.utcnow() - timedelta(hours=3)).strftime("%d%m%Y - %H:%M:%S")
 
         # Monta mensagem resumida para WhatsApp
         mensagem = f"Resumo do pedido completo {timestamp}:\n\n"
         mensagem += f'Numero: {whatsapp}\n'
-        mensagem += f"Pedido: {pedido}\n"
+        mensagem += f"Pedido:\n {pedido}\n"
         mensagem += f"Endereço: {endereco}\n"
         mensagem += f"Pagamento: {pagamento}\n\n"
         mensagem += "Obrigado pela preferência!🍔🍟"
@@ -259,7 +259,7 @@ def enviar_pedido():
         # Escapa para URL
         mensagem_url = quote(mensagem)
         #  Numero a para qual a mensagem será mandada
-        numero = '5587981554312'
+        numero = os.getenv("NUMBER_PHONE")
 
         # Salva na planilha
         sheet.append_row([timestamp, whatsapp, pedido, endereco, pagamento])

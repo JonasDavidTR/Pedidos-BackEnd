@@ -33,9 +33,20 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
         // Salva no localStorage
         localStorage.setItem("whatsapp", form.whatsapp.value);
         localStorage.setItem("endereco", form.endereco.value);
-
-        //window.open(data.whatsapp_link, '_blank');  // Abre WhatsApp com mensagem pronta
-        window.location.href = data.whatsapp_link
+        
+        // Abre WhatsApp com mensagem pronta (o comentado só funciona em android, já o em execução
+        // é para a maioria dos dispositivos)
+        // window.location.href = data.whatsapp_link;
+        if (navigator.userAgent.includes("iPhone") || navigator.userAgent.includes("iPad")) {
+            const a = document.createElement('a');
+            a.href = data.whatsapp_link;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            document.body.appendChild(a);
+            a.click();
+        } else {
+            window.location.href = data.whatsapp_link;
+        }
         
         alert("Pedido enviado com sucesso!");
         form.reset();
