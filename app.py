@@ -246,12 +246,12 @@ def enviar_pedido():
         endereco = request.form["endereco"]
         pagamento = request.form["pagamento"]
 
-        timestamp = (datetime.utcnow() - timedelta(hours=3)).strftime("%d%m%Y - %H:%M:%S")
+        timestamp = (datetime.utcnow() - timedelta(hours=3)).strftime("%d/%m/%Y - %H:%M:%S")
 
         # Monta mensagem resumida para WhatsApp
         mensagem = f"Resumo do pedido completo {timestamp}:\n\n"
         mensagem += f'Numero: {whatsapp}\n'
-        mensagem += f"Pedido:\n {pedido}\n"
+        mensagem += f"Pedido:\n{pedido}\n"
         mensagem += f"Endereço: {endereco}\n"
         mensagem += f"Pagamento: {pagamento}\n\n"
         mensagem += "Obrigado pela preferência!🍔🍟"
