@@ -33,26 +33,26 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
         localStorage.setItem("whatsapp", form.whatsapp.value);
         localStorage.setItem("endereco", form.endereco.value);
 
-        const isIOS = /iPhone|iPad/.test(navigator.userAgent);
+        const linkWpp = data.whatsapp_link;
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
         if (isIOS) {
-            const div = document.getElementById("confirmacao-pedido") || document.createElement("div");
-            div.id = "confirmacao-pedido";
-            div.innerHTML = `
-                <p>Pedido enviado com sucesso! Clique abaixo para finalizar no WhatsApp:</p>
-                <button id="btn-wpp" style="padding: 10px 20px; font-size: 16px;">Abrir WhatsApp</button>
-            `;
-            document.body.appendChild(div);
-
-            document.getElementById("btn-wpp").onclick = () => {
-                window.location.href = data.whatsapp_link;
-            };
+            // iOS exige interação direta pra abrir nova aba
+            const a = document.createElement('a');
+            a.href = linkWpp;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.click();
         } else {
-            window.location.href = data.whatsapp_link;
+            // Android, PC etc.
+            window.location.href = linkWpp;
         }
 
-        form.reset();
-        calcularTotal();
+        setTimeout(() => {
+            alert("Pedido enviado com sucesso!");
+            form.reset();
+            calcularTotal();
+        }, 500); // Pequeno delay pra não interromper o redirecionamento
     } else {
         alert("Erro: " + data.mensagem);
     }
