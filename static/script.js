@@ -30,27 +30,29 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
 .then(res => res.json())
 .then(data => {
     if (data.status === "sucesso") {
-        // Salva no localStorage
         localStorage.setItem("whatsapp", form.whatsapp.value);
         localStorage.setItem("endereco", form.endereco.value);
-        
-        // Abre WhatsApp com mensagem pronta (o comentado só funciona em android, já o em execução
-        // é para a maioria dos dispositivos)
-        // window.location.href = data.whatsapp_link;
-        if (navigator.userAgent.includes("iPhone") || navigator.userAgent.includes("iPad")) {
-            const a = document.createElement('a');
-            a.href = data.whatsapp_link;
-            a.target = '_blank';
-            a.rel = 'noopener noreferrer';
-            document.body.appendChild(a);
-            a.click();
+
+        const isIOS = /iPhone|iPad/.test(navigator.userAgent);
+
+        if (isIOS) {
+            const div = document.getElementById("confirmacao-pedido") || document.createElement("div");
+            div.id = "confirmacao-pedido";
+            div.innerHTML = `
+                <p>Pedido enviado com sucesso! Clique abaixo para finalizar no WhatsApp:</p>
+                <button id="btn-wpp" style="padding: 10px 20px; font-size: 16px;">Abrir WhatsApp</button>
+            `;
+            document.body.appendChild(div);
+
+            document.getElementById("btn-wpp").onclick = () => {
+                window.location.href = data.whatsapp_link;
+            };
         } else {
             window.location.href = data.whatsapp_link;
         }
-        
-        alert("Pedido enviado com sucesso!");
+
         form.reset();
-        calcularTotal(); // reseta o total
+        calcularTotal();
     } else {
         alert("Erro: " + data.mensagem);
     }
