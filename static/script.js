@@ -16,55 +16,73 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
 
     const form = event.target;
     const button = form.querySelector("button");
-    
-    // Desativa o botão e muda o texto
     button.disabled = true;
     button.textContent = "Enviando pedido... Aguarde";
 
     const formData = new FormData(form);
-    fetch("https://pedidos-backend-0ggt.onrender.com/enviar-pedido", {
+
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const linkWppPromise = fetch("https://pedidos-backend-0ggt.onrender.com/enviar-pedido", {
         method: "POST",
-    body: formData
-})
+        body: formData
+    }).then(res => res.json());
 
-.then(res => res.json())
-.then(data => {
-    if (data.status === "sucesso") {
-        localStorage.setItem("whatsapp", form.whatsapp.value);
-        localStorage.setItem("endereco", form.endereco.value);
+    if (isIOS) {
+        // iOS: abrir link via click direto no evento submit (interação direta)
+        // Criar link com href padrão (vai abrir depois da resposta)
+        // ou abrir um link temporário que o usuário pode usar logo
+        // Mas você quer só abrir após a resposta, então essa solução é limitada.
 
-        const linkWpp = data.whatsapp_link;
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        // Uma saída simples:
+        alert("No iOS, após enviar o pedido, você precisará clicar no link para abrir o WhatsApp.");
+        
+        linkWppPromise.then(data => {
+            if (data.status === "sucesso") {
+                localStorage.setItem("whatsapp", form.whatsapp.value);
+                localStorage.setItem("endereco", form.endereco.value);
 
-        if (isIOS) {
-            // iOS exige interação direta pra abrir nova aba
-            const a = document.createElement('a');
-            a.href = linkWpp;
-            a.target = '_blank';
-            a.rel = 'noopener noreferrer';
-            a.click();
-        } else {
-            // Android, PC etc.
-            window.location.href = linkWpp;
-        }
+                // Mostra o link para o usuário clicar
+                const div = document.getElementById("confirmacao-pedido");
+                div.innerHTML = `<a href="${data.whatsapp_link}" target="_blank" rel="noopener noreferrer">Clique aqui para abrir o WhatsApp</a>`;
 
-        setTimeout(() => {
-            alert("Pedido enviado com sucesso!");
-            form.reset();
-            calcularTotal();
-        }, 500); // Pequeno delay pra não interromper o redirecionamento
+                form.reset();
+                calcularTotal();
+            } else {
+                alert("Erro: " + data.mensagem);
+            }
+        }).catch(() => {
+            alert("Erro ao enviar pedido. Tente novamente.");
+        }).finally(() => {
+            button.disabled = false;
+            button.textContent = "Enviar Pedido";
+        });
+
     } else {
-        alert("Erro: " + data.mensagem);
+        // Android e outros
+        linkWppPromise.then(data => {
+            if (data.status === "sucesso") {
+                localStorage.setItem("whatsapp", form.whatsapp.value);
+                localStorage.setItem("endereco", form.endereco.value);
+
+                window.location.href = data.whatsapp_link;
+
+                setTimeout(() => {
+                    alert("Pedido enviado com sucesso!");
+                    form.reset();
+                    calcularTotal();
+                }, 500);
+            } else {
+                alert("Erro: " + data.mensagem);
+            }
+        }).catch(() => {
+            alert("Erro ao enviar pedido. Tente novamente.");
+        }).finally(() => {
+            button.disabled = false;
+            button.textContent = "Enviar Pedido";
+        });
     }
-})
-.catch(() => {
-    alert("Erro ao enviar pedido. Tente novamente.");
-})
-.finally(() => {
-    button.disabled = false;
-    button.textContent = "Enviar Pedido";
 });
-});
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
