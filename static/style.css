@@ -113,6 +113,7 @@ select {
   flex: 1;
 }
 
+
 button {
   background-color: #d4a017;
   color: white;
@@ -127,6 +128,14 @@ button {
 
 button:hover {
   background-color: #b98b14;
+}
+
+.remover{
+  background-color: #dc3545;
+}
+
+.remover:hover{
+  background-color: #bd2130;
 }
 
 .total {

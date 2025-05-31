@@ -228,7 +228,7 @@ async function addItem(categoria) {
                 <option value="nao">Não</option>
             </select>
             <label>Observações:</label><textarea name="obs" placeholder="Ex: 1 com verdura, 1 sem"></textarea>
-            <button type="button" onclick="this.parentElement.remove(); calcularTotal()">Remover</button>`;
+            <button id="remover" type="button" onclick="this.parentElement.remove(); calcularTotal()">Remover</button>`;
     } else if (categoria === 'salgados') {
         html = `
             <label>Sabor (selecione):</label>
@@ -238,7 +238,7 @@ async function addItem(categoria) {
                 <option value="Coxinha">Coxinha</option>
             </select>
             <label>Quantidade:</label><input type="number" name="qtd" value="1" min="1" max="50" required>
-            <button type="button" onclick="this.parentElement.remove(); calcularTotal()">Remover</button>`;
+            <button id="remover" type="button" onclick="this.parentElement.remove(); calcularTotal()">Remover</button>`;
     } else if (categoria === 'doces') {
         html = `
             <label>Doce (selecione):</label>
@@ -252,7 +252,7 @@ async function addItem(categoria) {
             </select>
             <label>Quantidade:</label><input type="number" name="qtd" value="1" min="1" max="50" required>
             <label>Observações:</label><textarea name="obs" placeholder="Ex: Sem talher, sabor da trufa..."></textarea>
-            <button type="button" onclick="this.parentElement.remove(); calcularTotal()">Remover</button>`;
+            <button id="remover" type="button" onclick="this.parentElement.remove(); calcularTotal()">Remover</button>`;
     } else if (categoria === 'sucos') {
         html = `
             <label>Sabor (selecione):</label>
@@ -282,7 +282,7 @@ async function addItem(categoria) {
                 <option value="agua">Água</option>
             </select>
             <label>Observações:</label><textarea name="obs" placeholder="Ex: sem açúcar"></textarea>
-            <button type="button" onclick="this.parentElement.remove(); calcularTotal()">Remover</button>`;
+            <button id="remover" type="button" onclick="this.parentElement.remove(); calcularTotal()">Remover</button>`;
     } else if (categoria === 'refri') {
         html = `
         <label>Refrigerante (selecione):</label>
@@ -304,7 +304,7 @@ async function addItem(categoria) {
         </select>
         <label>Quantidade:</label><input type="number" name="qtd" value="1" min="1" max="4" required>
         <label>Observações:</label><textarea name="obs" placeholder="Ex: bem gelado"></textarea>
-        <button type="button" onclick="this.parentElement.remove(); calcularTotal()">Remover</button>
+        <button id="remover" type="button" onclick="this.parentElement.remove(); calcularTotal()">Remover</button>
     `;
     }
 
