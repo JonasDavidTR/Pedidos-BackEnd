@@ -30,11 +30,9 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
     if (isIOS) {
         // iOS: abrir link via click direto no evento submit (interação direta)
         // Criar link com href padrão (vai abrir depois da resposta)
-        // ou abrir um link temporário que o usuário pode usar logo
-        // Mas você quer só abrir após a resposta, então essa solução é limitada.
 
-        // Uma saída simples:
-        alert("No iOS, após enviar o pedido, você precisará clicar no link para abrir o WhatsApp.");
+        // Saída simples:
+        alert("Após enviar o pedido, você precisará clicar no link para abrir o WhatsApp.");
         
         linkWppPromise.then(data => {
             if (data.status === "sucesso") {
