@@ -7,8 +7,9 @@ from urllib.parse import quote
 from flask_cors import CORS
 
 app = Flask(__name__)
-# CORS(app, origins=["http://127.0.0.1:5000/"])
+
 CORS(app, origins=["https://pedidos-backend-0ggt.onrender.com/"])
+
 # escopo da API
 scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 

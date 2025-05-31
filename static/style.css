@@ -1,35 +1,48 @@
 body {
-  font-family: sans-serif;
-  background-color: #e6d395d7;
-  color: #333;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); /* azul escuro a roxo */
+  color: #f0f0f0;
+  /* min-height: 100vh; */
   padding: 10px;
   max-width: 600px;
   margin: auto;
 }
 
-.container {
-  padding: 20px;
-}
+
 
 h1 {
   text-align: center;
-  color: #d4a017;
+  color: #ffdd57;
 }
 
 h2 {
-  background-color: #ffeaa7;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
   padding: 10px;
   border-radius: 8px;
   cursor: pointer;
   margin-top: 15px;
 }
 
-.cardapio {
+/* .cardapio {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
   display: flex;
   gap: 10px;
   justify-content: center;
   flex-wrap: wrap;
   margin-bottom: 20px;
+}*/
+
+.cardapio {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Centraliza horizontalmente */
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .cardapio img {
@@ -37,6 +50,12 @@ h2 {
   cursor: pointer;
   border-radius: 8px;
   transition: transform 0.2s;
+}
+
+.cardapio img {
+  cursor: pointer;
+  transition: transform 0.2s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
 .cardapio img:hover {
@@ -51,45 +70,89 @@ h2 {
 
 /* Lightbox */
 .lightbox {
-  display: none;
   position: fixed;
-  z-index: 10;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.8);
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
   justify-content: center;
   align-items: center;
+  z-index: 999;
 }
 
 .lightbox img {
   max-width: 90%;
   max-height: 90%;
   border-radius: 10px;
+  box-shadow: 0 0 15px #000;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+
+form, .container{
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 100%;
+
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  display: block;
+  /* flex-direction: column; */
+  /* gap: 10px; */
+}
+
+button[class="btn-remover"]{
+  background-color: #e63946;
+  color: white;
+}
+button[class="btn-remover"]:hover{
+  background-color: #c0292e;
+}
+
+
+.container button{
+  margin-top: 15px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out; 
 }
 
 label {
+  display: block;
+  margin-top: 12px;
   font-weight: bold;
+  color: #ffffffcc;
 }
 
 input,
 textarea,
 select {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #222;
+  border: 1px solid #ccc;
+  border-radius: 8px;
   width: 100%;
   margin-top: 5px;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
+  font-size: 1rem;
   box-sizing: border-box;
+  transition: border 0.3s, box-shadow 0.3s;
+  margin-bottom:  7px;
 }
+
+select:focus, input:focus, textarea:focus {
+  outline: none;
+  border: 1px solid #ff8800; /* cor do foco */
+  box-shadow: 0 0 5px rgba(255, 136, 0, 0.5);
+}
+textarea::placeholder, input::placeholder {
+  color: #cccccc;
+}
+
 
 .item {
   border: 1px solid #ccc;
@@ -98,11 +161,11 @@ select {
   margin-top: 10px;
 }
 
-.categoria {
+/* .categoria {
   margin-top: 10px;
   padding-left: 10px;
   display: none;
-}
+} */
 
 .flex {
   display: flex;
@@ -137,10 +200,13 @@ button:hover {
 .remover:hover{
   background-color: #bd2130;
 }
-
 .total {
   text-align: center;
-  font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.2rem;
   margin-top: 20px;
+  background-color: #1d3557;
+  padding: 10px;
+  border-radius: 10px;
+  color: #f1faee;
+  font-weight: bold;
 }

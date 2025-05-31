@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pedido Online - Lanchonete</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-  
+
 </head>
 <body>
   <h1>Pedido Online</h1>
@@ -16,23 +16,23 @@
 
   <h2 onclick="toggleCategoria('lanches')">Lanches</h2>
   <div id="lanches" class="categoria"></div>
-  <button onclick="addItem('lanches')">Adicionar Lanche</button>
+  <button class="adicionar" onclick="addItem('lanches')">Adicionar Lanche</button>
 
   <h2 onclick="toggleCategoria('salgados')">Outros Salgados</h2>
   <div id="salgados" class="categoria"></div>
-  <button onclick="addItem('salgados')">Adicionar Salgados</button>
+  <button class="adicionar" onclick="addItem('salgados')">Adicionar Salgados</button>
 
   <h2 onclick="toggleCategoria('doces')">Doces</h2>
   <div id="doces" class="categoria"></div>
-  <button onclick="addItem('doces')">Adicionar Doce</button>
+  <button class="adicionar" onclick="addItem('doces')">Adicionar Doce</button>
 
   <h2 onclick="toggleCategoria('sucos')">Sucos</h2>
   <div id="sucos" class="categoria" data-categoria="sucos"></div>
-  <button onclick="addItem('sucos')">Adicionar Suco</button>
+  <button class="adicionar" onclick="addItem('sucos')">Adicionar Suco</button>
 
   <h2 onclick="toggleCategoria('refri')">Refrigerantes</h2>
   <div id="refri" class="categoria" data-categoria="refri"></div>
-  <button onclick="addItem('refri')">Adicionar Refrigerante</button>
+  <button class="adicionar" onclick="addItem('refri')">Adicionar Refrigerante</button>
 
   <div class="total" id="valor-total">Total: R$ 0,00</div>
 
