@@ -211,6 +211,7 @@ async function addItem(categoria) {
             <label>Sabor (selecione):</label>
             <select name="sabor" required>
                 <option value="">Escolher sabor</option>
+                <option value="hotdog">Cachorro quente</option>
                 <option value="Queijo">Queijo</option>
                 <option value="Carne">Carne</option>
                 <option value="Frango">Frango</option>
@@ -218,8 +219,6 @@ async function addItem(categoria) {
                 <option value="fQueijo">Frango com Queijo</option>
                 <option value="Catupiry">Frango com Catupiry</option>
                 <option value="Cheddar">Frango com Cheddar</option>
-                <option value="br">-------------</option>
-                <option value="hotdog">Cachorro quente</option>
             </select>
             <label>Quantidade:</label><input type="number" name="qtd" value="1" min="1" max="50" required>
             <label>Completo (molhos e verdura)?</label>
@@ -420,7 +419,7 @@ async function atualizarResumoEValor() {
         const data = await resposta.json();
 
         if (data.status === "sucesso") {
-            document.getElementById('valor-total').textContent = `R$ ${data.valorTotal.toFixed(2)}`;
+            document.getElementById('valor-total').textContent = `Total: R$ ${data.valorTotal.toFixed(2)}`;
         } else {
             // Erro retornado pelo backend (ex: quantidade inválida)
             alert("Erro: " + data.mensagem);
