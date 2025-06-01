@@ -59,7 +59,9 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
 
                 botao.onclick = () => {
                     window.open(data.whatsapp_link, "_blank");
-                    location.reload();
+                    setTimeout(() => {
+                        location.reload();
+                    }, 60000);
                 };
 
                 //div.innerHTML = "<p><strong>Pedido enviado!</strong> Clique abaixo para abrir o WhatsApp:</p>";
@@ -90,7 +92,7 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
                     alert("Pedido enviado com sucesso!");
                     form.reset();
                     calcularTotal();
-                }, 500);
+                }, 5000);
             } else {
                 alert("Erro: " + data.mensagem);
             }
