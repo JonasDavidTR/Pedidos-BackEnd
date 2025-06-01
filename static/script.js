@@ -39,9 +39,31 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
                 localStorage.setItem("whatsapp", form.whatsapp.value);
                 localStorage.setItem("endereco", form.endereco.value);
 
+                 // cria ou seleciona uma div para exibir o botão
+                const div = document.getElementById("confirmacao-pedido") || document.createElement("div");
+                if (!div.id) {
+                    div.style.marginTop = "20px";
+                    form.appendChild(div);
+                }
+                div.innerHTML = "<p><strong>Pedido enviado!</strong> Clique abaixo para abrir o WhatsApp:</p>";
+
                 // Mostra o link para o usuário clicar
-                const div = document.getElementById("confirmacao-pedido");
-                div.innerHTML = `<a href="${data.whatsapp_link}" target="_blank" rel="noopener noreferrer">Clique aqui para abrir o WhatsApp</a>`;
+                const botao = document.createElement("button");
+                botao.textContent = "Abrir WhatsApp";
+                botao.style.backgroundColor = "#25D366";
+                botao.style.color = "white";
+                botao.style.padding = "10px 15px";
+                botao.style.border = "none";
+                botao.style.borderRadius = "5px";
+                botao.style.fontWeight = "bold";
+
+                botao.onclick = () => {
+                    window.open(data.whatsapp_link, "_blank");
+                };
+
+                //div.innerHTML = "<p><strong>Pedido enviado!</strong> Clique abaixo para abrir o WhatsApp:</p>";
+                div.appendChild(botao);
+                div.scrollIntoView({ behavior: 'smooth' });
 
                 form.reset();
                 calcularTotal();
@@ -269,7 +291,6 @@ async function addItem(categoria) {
                 <option value="Uva">Uva</option>
                 <option value="Acai">Açaí</option>
                 <option value="Caju">Caju</option>
-                <option value="Caja">Cajá</option>
                 <option value="Caja">Cajá</option>
                 <option value="Pinha">Pinha</option>
                 <option value="Umbu">Umbu</option>
