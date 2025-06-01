@@ -59,10 +59,10 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
 
                 botao.onclick = () => {
                     window.open(data.whatsapp_link, "_blank");
-                    setTimeout(() => {
-                        location.reload();
-                    }, 60000);
                 };
+                setTimeout(() => {
+                        location.reload();
+                }, 60000);
 
                 //div.innerHTML = "<p><strong>Pedido enviado!</strong> Clique abaixo para abrir o WhatsApp:</p>";
                 div.appendChild(botao);
@@ -79,6 +79,7 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
             button.textContent = "Enviar Pedido";
         });
 
+
     } else {
         // Android e outros
         linkWppPromise.then(data => {
@@ -92,7 +93,7 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
                     alert("Pedido enviado com sucesso!");
                     form.reset();
                     calcularTotal();
-                }, 5000);
+                }, 60000);
             } else {
                 alert("Erro: " + data.mensagem);
             }
