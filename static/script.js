@@ -59,13 +59,13 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
 
                 botao.onclick = () => {
                     window.open(data.whatsapp_link, "_blank");
+                    location.reload();
                 };
 
                 //div.innerHTML = "<p><strong>Pedido enviado!</strong> Clique abaixo para abrir o WhatsApp:</p>";
                 div.appendChild(botao);
                 div.scrollIntoView({ behavior: 'smooth' });
 
-                form.reset();
                 calcularTotal();
             } else {
                 alert("Erro: " + data.mensagem);
