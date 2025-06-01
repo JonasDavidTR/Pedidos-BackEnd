@@ -64,17 +64,21 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
                 
                 botao.onclick = () => {
                     window.open(data.whatsapp_link, "_blank");
-                    async function exec() {
-                        
-                        await esperar(10000); // Espera 10 segundos
-                    }
-                    exec();
+                    
                 };
+                
 
                 //div.innerHTML = "<p><strong>Pedido enviado!</strong> Clique abaixo para abrir o WhatsApp:</p>";
                 div.appendChild(botao);
                 div.scrollIntoView({ behavior: 'smooth' });
-
+                //////////////////
+                async function exec() {
+                        
+                    await esperar(30000); // Espera 30 segundos
+                }
+                exec();
+                /////////////
+        
                 calcularTotal();
             } else {
                 alert("Erro: " + data.mensagem);
