@@ -57,12 +57,19 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
                 botao.style.borderRadius = "5px";
                 botao.style.fontWeight = "bold";
 
+                function esperar(ms) {
+                    return new Promise(resolve => setTimeout(resolve, ms));
+                }
+
+                
                 botao.onclick = () => {
                     window.open(data.whatsapp_link, "_blank");
+                    async function exec() {
+                        
+                        await esperar(10000); // Espera 10 segundos
+                    }
+                    exec();
                 };
-                setTimeout(() => {
-                        location.reload();
-                }, 60000);
 
                 //div.innerHTML = "<p><strong>Pedido enviado!</strong> Clique abaixo para abrir o WhatsApp:</p>";
                 div.appendChild(botao);
