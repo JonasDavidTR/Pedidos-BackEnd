@@ -10,8 +10,8 @@
 <body>
   <h1>Pedido Online</h1>
   <div class="cardapio">
-      <img src="static/images/lanches.jpg" alt="Cardápio 1" onclick="abrirLightbox(this.src)">
-      <img src="static/images/refri.jpg" alt="Cardápio 2" onclick="abrirLightbox(this.src)">
+      <img src="{{ url_for('static', filename='images/lanches.jpg') }}" alt="Cardápio 1" onclick="abrirLightbox(this.src)">
+      <img src="{{ url_for('static', filename='images/refri.jpg') }}" alt="Cardápio 2" onclick="abrirLightbox(this.src)">
   </div>
 
   <h2 onclick="toggleCategoria('lanches')">Lanches</h2>
@@ -46,7 +46,7 @@
       <label for="resumo-pedido">Resumo do pedido:</label>
       <textarea id="resumo-pedido" name="pedido" rows="4" readonly></textarea>
 
-      <label for="Endereço">Endereço com ponto de referência: </label>
+      <label for="endereco">Endereço com ponto de referência: </label>
       <textarea id="endereco" name="endereco" rows="2" required></textarea>
 
       <label for="pagamento">Forma de Pagamento:</label>
@@ -67,25 +67,19 @@
     <img id="lightbox-img" src="" alt="Imagem Ampliada">
   </div>
 
+<!--
+
 <script>
     document.querySelector("form").addEventListener("submit", function(event) {
         // Espera um pouquinho pra garantir que o pedido seja enviado antes de recarregar
         setTimeout(() => {
-            location.reload(); // recarrega a página (como se fosse um F5)
-        }, 500); // 0.5 segundo de atraso
+          location.reload(); // recarrega a página (como se fosse um F5)
+          }, 50000); // 0.5 segundo de atraso
     });
 </script>
+-->
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
-
-<script>
-  document.querySelector("form").addEventListener("submit", function(event) {
-      // Espera um pouquinho pra garantir que o pedido seja enviado antes de recarregar
-      setTimeout(() => {
-          location.reload(); // recarrega a página (como se fosse um F5)
-      }, 50000); //
-  });
-</script>
 
 </body>
 </html>

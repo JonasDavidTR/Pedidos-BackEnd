@@ -57,28 +57,30 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
                 botao.style.borderRadius = "5px";
                 botao.style.fontWeight = "bold";
 
-                function esperar(ms) {
-                    return new Promise(resolve => setTimeout(resolve, ms));
-                }
-
                 
                 botao.onclick = () => {
                     window.open(data.whatsapp_link, "_blank");
                     
                 };
                 
-
                 //div.innerHTML = "<p><strong>Pedido enviado!</strong> Clique abaixo para abrir o WhatsApp:</p>";
                 div.appendChild(botao);
                 div.scrollIntoView({ behavior: 'smooth' });
+
+
                 //////////////////
+                function esperar(ms) {
+                    return new Promise(resolve => setTimeout(resolve, ms));
+                }
+                
+
                 async function exec() {
-                        
-                    await esperar(30000); // Espera 30 segundos
+                    await esperar(10000); // Espera 10 segundos
+                    location.reload();
                 }
                 exec();
-                /////////////
-        
+                //////////////////
+
                 calcularTotal();
             } else {
                 alert("Erro: " + data.mensagem);
