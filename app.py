@@ -34,10 +34,8 @@ except Exception as e:
 
 #Atutenticador 
 # Usuário e senha que você quer proteger
-# USERNAME = os.getenv("USERNAME")
-# PASSWORD = os.getenv("PASSWD")
-USERNAME = "adm"
-PASSWORD = "dl1"
+USERNAME = os.getenv("USERNAME")
+PASSWORD = os.getenv("PASSWD")
 
 def check_auth(username, password):
     return username == USERNAME and password == PASSWORD
