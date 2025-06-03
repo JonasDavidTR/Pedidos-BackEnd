@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='adminStyle.css') }}" />
 </head>
 <body>
-  
+
 <h2>Configuração de Disponibilidade</h2>
 <form id="adminForm">
   {% set categorias = ['Pastel', 'Salgado', 'Doce', 'Suco', 'Refri'] %}
@@ -48,7 +48,7 @@
       disponibilidade
     }));
 
-    fetch('https://pedidos-backend-0ggt.onrender.com/atualizar-disponibilidade', {
+    fetch('https://degust-lanches.onrender.com/atualizar-disponibilidade', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

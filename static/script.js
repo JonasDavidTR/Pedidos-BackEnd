@@ -22,7 +22,7 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
     const formData = new FormData(form);
 
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const linkWppPromise = fetch("https://pedidos-backend-0ggt.onrender.com/enviar-pedido", {
+    const linkWppPromise = fetch("https://degust-lanches.onrender.com/enviar-pedido", {
         method: "POST",
         body: formData
     }).then(res => res.json());
@@ -174,7 +174,7 @@ function toggleCategoria(id) {
 let disponibilidadeGlobal = {}; // variável global para armazenar disponibilidade do cardápio
 async function carregarDisponibilidade() {
     try {
-        const res = await fetch('https://pedidos-backend-0ggt.onrender.com/disponibilidade');
+        const res = await fetch('https://degust-lanches.onrender.com/disponibilidade');
         if (!res.ok) throw new Error('Erro ao buscar disponibilidade');
         disponibilidadeGlobal = await res.json();
     } catch (e) {
