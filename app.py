@@ -250,9 +250,9 @@ def enviar_pedido():
         timestamp = (datetime.utcnow() - timedelta(hours=3)).strftime("%d/%m/%Y - %H:%M:%S")
 
         # Monta mensagem resumida para WhatsApp
-        mensagem = f"Resumo do pedido completo {timestamp}:\n\n"
-        mensagem += f'Numero: {whatsapp}\n'
-        mensagem += f"Pedido:\n{pedido}\n"
+        mensagem = f"Resumo do pedido completo {timestamp}:\n"
+        mensagem += f'Numero: {whatsapp}\n\n'
+        mensagem += f"Pedido:\n{pedido}\n\n"
         mensagem += f"Endereço: {endereco}\n"
         mensagem += f"Pagamento: {pagamento}\n\n"
         mensagem += "Obrigado pela preferência!🍔🍟"
