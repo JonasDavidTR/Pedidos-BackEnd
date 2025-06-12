@@ -16,14 +16,17 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
 
     const form = event.target;
 
-    const zap = form.whatsapp.value.trim();//whatsapp
-    const ender = form.endereco.value.trim();//endereco
-    const resu = form.resumo.value.trim();//resumo
+    const whatsapp = form.whatsapp.value.trim();
+    const endereco = form.endereco.value.trim();
+    const resumo = form.resumo.value.trim();
 
-    if (!zap || !ender || !resu) {
+    if (!whatsapp || !endereco || !resumo) {
         alert("Por favor, preencha todos os campos obrigatórios corretamente.");
         return; // Impede o envio de campos inválidos
-    }else{const button = form.querySelector("button");
+    }
+
+
+    const button = form.querySelector('button[type="submit"]');
     button.disabled = true;
     button.textContent = "Enviando pedido... Aguarde";
 
@@ -124,10 +127,7 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
             button.disabled = false;
             button.textContent = "Enviar Pedido";
         });
-    }}
-
-
-    
+    }
 });
 
 
