@@ -23,10 +23,7 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
     if (!zap || !ender || !resu) {
         alert("Por favor, preencha todos os campos obrigatórios corretamente.");
         return; // Impede o envio de campos inválidos
-    }
-
-
-    const button = form.querySelector("button");
+    }else{const button = form.querySelector("button");
     button.disabled = true;
     button.textContent = "Enviando pedido... Aguarde";
 
@@ -127,7 +124,10 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
             button.disabled = false;
             button.textContent = "Enviar Pedido";
         });
-    }
+    }}
+
+
+    
 });
 
 
