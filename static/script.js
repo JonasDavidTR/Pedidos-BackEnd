@@ -15,17 +15,6 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
     event.preventDefault();
 
     const form = event.target;
-
-    const whatsapp = form.whatsapp.value.trim();
-    const endereco = form.endereco.value.trim();
-    const resumo = form.resumo.value.trim();
-
-    if (!whatsapp || !endereco || !resumo) {
-        alert("Por favor, preencha todos os campos obrigatórios corretamente.");
-        return; // Impede o envio de campos inválidos
-    }
-
-
     const button = form.querySelector('button[type="submit"]');
     button.disabled = true;
     button.textContent = "Enviando pedido... Aguarde";

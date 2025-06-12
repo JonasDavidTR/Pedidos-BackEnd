@@ -156,7 +156,7 @@ select:focus, input:focus, textarea:focus {
   box-shadow: 0 0 5px rgba(255, 136, 0, 0.5);
 }
 textarea::placeholder, input::placeholder {
-  color: #cccccc;
+  color: #6d6c6c;
 }
 
 
