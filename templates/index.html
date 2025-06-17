@@ -6,14 +6,26 @@
   <title>Pedido Online - Lanchonete</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
   <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+  <link rel="stylesheet" href="{{ url_for('static', filename='cardapioStyle.css') }}" />
 
 </head>
 <body>
   <h1>Pedido Online</h1>
-  <div class="cardapio">
-      <img src="{{ url_for('static', filename='images/lanches.jpg') }}" alt="Cardápio 1" onclick="abrirLightbox(this.src)">
-      <img src="{{ url_for('static', filename='images/refri.jpg') }}" alt="Cardápio 2" onclick="abrirLightbox(this.src)">
+  <!-- Botão para mostrar/esconder -->
+  <button id="abrir-btn-cardapio" onclick="abrirCardapio()">
+    Mostrar Cardápio
+  </button>
+
+  <!-- Container do cardápio (imagem) escondido por padrão -->
+  <div id="cardapio-container" style="max-height: 0; overflow: hidden; transition: max-height 0.5s ease;">
+    <div class="cardapio">
+        <img src="{{ url_for('static', filename='images/lanches.jpg') }}" alt="Cardápio 1" onclick="abrirLightbox(this.src)">
+        <img src="{{ url_for('static', filename='images/refri.jpg') }}" alt="Cardápio 2" onclick="abrirLightbox(this.src)">
+    </div>
   </div>
+
+
+
 
   <h2 onclick="toggleCategoria('lanches')">Lanches</h2>
   <div id="lanches" class="categoria"></div>
@@ -70,6 +82,8 @@
   </div>
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
+<script src="{{ url_for('static', filename='toggleCardapio.js') }}" defer></script>
+
 
 <script>
   document.getElementById('pedido-form').addEventListener('submit', function(event) {

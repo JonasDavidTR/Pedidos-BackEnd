@@ -1,0 +1,15 @@
+#abrir-btn-cardapio {
+    display: block;
+    margin: 20px auto; /* centraliza */
+    padding: 15px 30px; /* aumenta altura e largura */
+    font-size: 18px;
+    background-color: #ffcc00; /* amarelo pastel */
+    color: #333; /* cor do texto */
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: center;
+    width: 80%; /* ocupa 80% da largura do container */
+    max-width: 400px; /* no máximo 400px de largura */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* sombra leve */
+}
