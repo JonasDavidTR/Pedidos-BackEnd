@@ -11,8 +11,13 @@ document.addEventListener('mousemove', () => tempoInativo = 0);
 document.addEventListener('keydown', () => tempoInativo = 0);
 
 
+let enviandoPedido = false;
+
 document.getElementById("pedido-form").addEventListener("submit", function(event) {
     event.preventDefault();
+
+    if (enviandoPedido) return; // bloqueia envios repetidos
+    enviandoPedido = true;
 
     const form = event.target;
     const button = form.querySelector('button[type="submit"]');
@@ -75,7 +80,7 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
                 
 
                 async function exec() {
-                    await esperar(10000); // Espera 10 segundos
+                    await esperar(15000); // Espera 15 segundos
                     location.reload();
                 }
                 exec();
@@ -88,8 +93,8 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
         }).catch(() => {
             alert("Erro ao enviar pedido. Tente novamente.");
         }).finally(() => {
-            button.disabled = false;
-            button.textContent = "Enviar Pedido";
+            // button.disabled = false;
+            // button.textContent = "Enviar Pedido";
         });
 
 
