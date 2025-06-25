@@ -71,7 +71,7 @@
         <option value="Cartão">Cartão</option>
       </select>
 
-      <button type="submit">Enviar Pedido</button>
+      <button id="btn-enviar" type="submit">Enviar Pedido</button>
 
     </form>
   </div>
@@ -83,21 +83,6 @@
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 <script src="{{ url_for('static', filename='toggleCardapio.js') }}" defer></script>
-
-
-<script>
-  document.getElementById('pedido-form').addEventListener('submit', function(event) {
-    const zap = document.getElementById('whatsapp').value.trim();
-    const resumo = document.getElementById('resumo-pedido').value.trim();
-    const endereco = document.getElementById('endereco').value.trim();
-
-    if (zap === '' || resumo === '' || endereco === '') {
-      alert('Por favor, preencha todos os campos obrigatórios!');
-      event.preventDefault(); // Impede o envio do formulário
-    }
-  });
-</script>
-
 
 </body>
 </html>

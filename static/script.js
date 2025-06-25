@@ -5,7 +5,7 @@ setInterval(() => {
     if (tempoInativo >= 15) { // 15 minutos
         location.reload(); // atualiza a página
     }
-}, 60000); // 1 minuto
+}, 60000); //
 
 document.addEventListener('mousemove', () => tempoInativo = 0);
 document.addEventListener('keydown', () => tempoInativo = 0);
@@ -17,10 +17,23 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
     event.preventDefault();
 
     if (enviandoPedido) return; // bloqueia envios repetidos
+    // Valida campos obrigatórios
+    const textareaResumo = document.getElementById('resumo-pedido');
+    const whatsapp = document.querySelector("input[name='whatsapp']").value.trim();
+    const endereco = document.querySelector("[name='endereco']").value.trim();
+
+    if (textareaResumo.value.trim() === "") {
+        alert("⚠️ Você ainda não montou seu pedido. Adicione os itens antes de enviar.");
+        return;
+    }
+
+    // Se passar em tudo, continua
     enviandoPedido = true;
 
+   
     const form = event.target;
     const button = form.querySelector('button[type="submit"]');
+
     button.disabled = true;
     button.textContent = "Enviando pedido... Aguarde";
 
@@ -37,7 +50,7 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
         // Criar link com href padrão (vai abrir depois da resposta)
 
         // Saída simples:
-        alert("Após enviar o pedido, você precisará clicar no link para abrir o WhatsApp.");
+        alert("💬 Para concluir o pedido, clique no botão abaixo. Em seguida, abriremos o WhatsApp para finalizar.");
         
         linkWppPromise.then(data => {
             if (data.status === "sucesso") {
@@ -448,6 +461,9 @@ async function buscarValorTotal(pedido) {
 async function atualizarResumoEValor() {
     const { resumo, pedido } = gerarResumo();
     document.getElementById('resumo-pedido').textContent = resumo;
+
+    
+
 
     try {
         const resposta = await fetch("/calcular-valor", {
