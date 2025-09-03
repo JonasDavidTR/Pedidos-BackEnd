@@ -252,9 +252,9 @@ def enviar_pedido():
         # Monta mensagem resumida para WhatsApp
         mensagem = f"Resumo do pedido completo {timestamp}:\n"
         mensagem += f'Numero: {whatsapp}\n\n'
-        mensagem += f"Pedido:\n{pedido}\n\n"
+        mensagem += f"Pedido:\n{pedido}\n"
         mensagem += f"Endereço: {endereco}\n"
-        mensagem += f"Pagamento: {pagamento}\n\n"
+        mensagem += f"Pagamento: {pagamento}"
 
         # Escapa para URL
         mensagem_url = quote(mensagem)
