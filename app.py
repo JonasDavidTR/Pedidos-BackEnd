@@ -255,7 +255,6 @@ def enviar_pedido():
         mensagem += f"Pedido:\n{pedido}\n\n"
         mensagem += f"Endereço: {endereco}\n"
         mensagem += f"Pagamento: {pagamento}\n\n"
-        mensagem += "Obrigado pela preferência!🍔🍟"
 
         # Escapa para URL
         mensagem_url = quote(mensagem)

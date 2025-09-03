@@ -159,6 +159,10 @@ textarea::placeholder, input::placeholder {
   color: #6d6c6c;
 }
 
+#resumo-pedido{
+  background-color: #4a6d7e;
+}
+
 
 .item {
   border: 1px solid #ccc;
