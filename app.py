@@ -159,8 +159,8 @@ precos = {
     'beijinho': 1.00,
     'sucoLeite': 4.00,
     'sucoAgua': 3.50,
-    'coca': {'Juininho': 3.00, 'Lata': 5.00, '1L': 7.00, '2L': 12.00},
-    'fanta': {'Juininho': 2.00, 'Lata': 5.00, '1L': 7.00, '2L': 12.00},
+    'coca': {'Juininho': 3.00, 'Lata': 5.00, '1L': 8.00, '2L': 13.00},
+    'fanta': {'Juininho': 2.00, 'Lata': 5.00, '1L': 8.00, '2L': 13.00},
     'guarana': {'Juininho': 2.00, 'Lata': 4.00, '1L': 6.00, '2L': 10.00},
     'outros': {'Juininho': 2.00, 'Lata': 4.00, '1l': 6.00, '2l': 10.00}  # pepsi/uva/limao
 }
@@ -220,7 +220,7 @@ def calcular_valor():
                     tabela = precos['fanta']
                 elif sabor == 'guarana':
                     tabela = precos['guarana']
-                else:
+                elif sabor == 'outros':
                     tabela = precos['outros']
                 preco = tabela.get(tamanhoRefri, 0)
             else:

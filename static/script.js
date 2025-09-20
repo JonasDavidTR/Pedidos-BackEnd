@@ -82,7 +82,7 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
                 };
                 
                 //div.innerHTML = "<p><strong>Pedido enviado!</strong> Clique abaixo para abrir o WhatsApp:</p>";
-                div.appendChild(botao);
+                div.appendChild(botao);;
                 div.scrollIntoView({ behavior: 'smooth' });
 
 
@@ -93,7 +93,7 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
                 
 
                 async function exec() {
-                    await esperar(15000); // Espera 15 segundos
+                    await esperar(30000); // Espera 30 segundos
                     location.reload();
                 }
                 exec();
@@ -104,7 +104,7 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
                 alert("Erro: " + data.mensagem);
             }
         }).catch(() => {
-            alert("Erro ao enviar pedido. Tente novamente.");
+            // alert("Erro ao enviar pedido. Tente novamente.");
         }).finally(() => {
             // button.disabled = false;
             // button.textContent = "Enviar Pedido";
@@ -129,7 +129,7 @@ document.getElementById("pedido-form").addEventListener("submit", function(event
                 alert("Erro: " + data.mensagem);
             }
         }).catch(() => {
-            alert("Erro ao enviar pedido. Tente novamente.");
+            // alert("Erro ao enviar pedido. Tente novamente.");
         }).finally(() => {
             button.disabled = false;
             button.textContent = "Enviar Pedido";
@@ -164,23 +164,23 @@ function fecharLightbox() {
     document.getElementById("lightbox").style.display = "none";
 }
 
-const precos = {
-    pastel: 6.00,
-    coxinha: 4.00,
-    enroladinho: 2.50,
-    hotdog: 5.00,
-    bolo: 5.00,
-    trufa: 3.00,
-    tortilete: 3.00,
-    brigadeiro: 1.00,
-    beijinho: 1.00,
-    sucoLeite: 4.00,
-    sucoAgua: 3.50,
-    coca: { Juininho: 3, Lata: 5, '1L': 7, '2L': 12 },
-    fanta: { Juininho: 2, Lata: 5, '1L': 7, '2L': 12},
-    guarana: { Juininho: 2, Lata: 4, '1L': 6, '2L': 10 },
-    outros: { Juininho: 2, Lata: 4, '1L': 6, '2L': 10 }
-};
+// const precos = {
+//     pastel: 6.00,
+//     coxinha: 4.00,
+//     enroladinho: 2.50,
+//     hotdog: 5.00,
+//     bolo: 5.00,
+//     trufa: 3.00,
+//     tortilete: 3.00,
+//     brigadeiro: 1.00,
+//     beijinho: 1.00,
+//     sucoLeite: 4.00,
+//     sucoAgua: 3.50,
+//     coca: { Juininho: 3, Lata: 5, '1L': 8, '2L': 13 },
+//     fanta: { Juininho: 2, Lata: 5, '1L': 8, '2L': 13},
+//     guarana: { Juininho: 2, Lata: 4, '1L': 6, '2L': 10 },
+//     outros: { Juininho: 2, Lata: 4, '1L': 6, '2L': 10 }
+// };
 
 function toggleCategoria(id) {
     const cat = document.getElementById(id);
