@@ -162,7 +162,7 @@ precos = {
     'coca': {'Juininho': 3.00, 'Lata': 5.00, '1L': 8.00, '2L': 13.00},
     'fanta': {'Juininho': 2.00, 'Lata': 5.00, '1L': 8.00, '2L': 13.00},
     'guarana': {'Juininho': 2.00, 'Lata': 4.00, '1L': 6.00, '2L': 10.00},
-    'outros': {'Juininho': 2.00, 'Lata': 4.00, '1l': 6.00, '2l': 10.00}  # pepsi/uva/limao
+    'outros': {'Juininho': 2.00, 'Lata': 4.00, '1L': 6.00, '2L': 10.00}  # pepsi/uva/limao
 }
 
 @app.route("/calcular-valor", methods=["POST"])
@@ -220,8 +220,10 @@ def calcular_valor():
                     tabela = precos['fanta']
                 elif sabor == 'guarana':
                     tabela = precos['guarana']
-                elif sabor == 'outros':
+                elif sabor in ['limao','uva','pepsi']:
                     tabela = precos['outros']
+                else:
+                    raise ValueError("Tipo de refri inválido")
                 preco = tabela.get(tamanhoRefri, 0)
             else:
                 raise ValueError(f"Item desconhecido: {sabor}")
