@@ -164,23 +164,6 @@ function fecharLightbox() {
     document.getElementById("lightbox").style.display = "none";
 }
 
-// const precos = {
-//     pastel: 6.00,
-//     coxinha: 4.00,
-//     enroladinho: 2.50,
-//     hotdog: 5.00,
-//     bolo: 5.00,
-//     trufa: 3.00,
-//     tortilete: 3.00,
-//     brigadeiro: 1.00,
-//     beijinho: 1.00,
-//     sucoLeite: 4.00,
-//     sucoAgua: 3.50,
-//     coca: { Juininho: 3, Lata: 5, '1L': 8, '2L': 13 },
-//     fanta: { Juininho: 2, Lata: 5, '1L': 8, '2L': 13},
-//     guarana: { Juininho: 2, Lata: 4, '1L': 6, '2L': 10 },
-//     outros: { Juininho: 2, Lata: 4, '1L': 6, '2L': 10 }
-// };
 
 function toggleCategoria(id) {
     const cat = document.getElementById(id);
