@@ -148,9 +148,9 @@ def home():
 
 # Tabela de preços
 precos = {
-    'pastel': 6.00,
-    'coxinha': 4.00,
-    'enroladinho': 2.50,
+    'pastel': 7.00,
+    'coxinha': 5.00,
+    'enroladinho': 3.00,
     'hotdog': 6.00,
     'bolo': 6.00,
     'tortilete': 3.00,
