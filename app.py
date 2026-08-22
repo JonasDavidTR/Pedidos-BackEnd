@@ -161,8 +161,8 @@ precos = {
     'sucoAgua': 3.50,
     'coca': {'Juininho': 3.00, 'Lata': 5.00, '1L': 8.00, '2L': 13.00},
     'fanta': {'Juininho': 3.00, 'Lata': 5.00, '1L': 8.00, '2L': 13.00},
-    'guarana': {'Juininho': 3.00, 'Lata': 4.00, '1L': 7.00, '2L': 12.00},
-    'outros': {'Juininho': 3.00, 'Lata': 4.00, '1L': 7.00, '2L': 12.00}  # pepsi/uva/limao
+    'guarana': {'Juininho': 3.00, 'Lata': 5.00, '1L': 7.00, '2L': 12.00},
+    'outros': {'Juininho': 3.00, 'Lata': 5.00, '1L': 7.00, '2L': 12.00}  # pepsi/uva/limao
 }
 
 @app.route("/calcular-valor", methods=["POST"])
